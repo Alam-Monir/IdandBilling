@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Id</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box; /* Ensures padding and border do not affect width */
+      }
+    
+      html, body {
+        height: 100%; /* Ensure the body and html take up full height of the viewport */
+        width: 100%;  /* Ensure the body and html take up full width of the viewport */
+      }
+    
+      .container {
+        display: flex; /* Enables flexbox layout */
+        width: 100vw; /* Full viewport width */
+        height: 100vh; /* Full viewport height */
+      }
+    
+      .left-vertical {
+        flex: 1; /* Makes the left div take up available space */
+        border-right: 2px solid black; /* Adds a vertical dividing line */
+        padding: 10px;
+        box-sizing: border-box; /* Ensures padding doesn't affect width */
+      }
+    
+      .right-vertical {
+        flex: 1; /* Makes the right div take up available space */
+        padding: 10px;
+        box-sizing: border-box; /* Ensures padding doesn't affect width */
+      }
+    
+      .right-vertical hr {
+        width: 100%; /* Makes the hr span the full width of the parent */
+        margin: 10px 0; /* Optional: Adds spacing around the hr */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-vertical">Left vertical</div>
+      <div class="right-vertical">
+        <div class="d-flex justify-content-around">
+          <button class="btn btn-primary">Create New Layout</button>
+          <button class="btn btn-primary">Edit Existing Layout</button>
+        </div>
+        <hr class="border border-primary border-2 opacity-75" />
+        Right vertical
+      </div>
+    </div>
+  </body>
+</html>
