@@ -135,8 +135,7 @@ include("../includes/nav.php");
     schoolAddressInput.addEventListener('input', function() {
         schoolAddressDisplay.textContent = this.value || "School Address";
     });
-</script>
-<script>
+
     document.getElementById('layoutForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
