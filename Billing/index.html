@@ -15,7 +15,7 @@
     color: black;
   }
   .nav{
-    margin-top: 10px;
+    margin-top: 5px;
     background: #fff;
     padding: 30px 200px;
     border: solid black 3px;
@@ -27,9 +27,70 @@
     gap: 30px;
   }
   .box a{
+    border-radius: 10px;
     border: solid black;
     padding: 5px;
   }
+  .box a:hover{
+    background-color: black;
+    color: #fff;
+  }
+  .dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  background-color: #333;
+  min-width: 150px;
+  border-radius: 5px;
+}
+.dropdown-menu li {
+  padding: 10px;
+  color: white;
+}
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+.right{
+    margin-top: 5px;
+    margin-right: 50%;
+    margin-left: 20px;
+    margin-bottom: auto;
+    background: #fff;
+    padding: 30px 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+  
+
+}
+label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 40px;
+        }
+
+        button {
+            background-color: cornflowerblue;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 15px;
+            width: 100%;
+        }
 </style>
 
 
@@ -39,10 +100,28 @@
       <div class="nav">
         <div class="box">
           <a href="#">INVOICE</a>
-          <a href="#">EDIT ITEMS</a>
+          <a class="menu-item dropdown">
+            EDIT ITEMS
+            <ul class="dropdown-menu">
+              <li>example</li>
+              <li>example</li>
+              <li>example</li>
+            </ul>
+          </a>
           <a href="#">EDIT SELLER INFO</a>
           <a href="#">CUSTOMER DETAIL</a>
         </div>
+      </div>
+    </section>
+    <section class="container">
+      <div class="right">
+      
+              <div class="mb-3">
+                  <label for="imageUpload" class="py-2">Upload an image</label>
+                  <input type="file" name="image" class="form-control">
+              </div>
+              <button type="submit">Save Changes</button>
+          
       </div>
     </section>
   </body>
