@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Billing</title>
+    <link href="Billing/includes/nav.php" rel="stylesheet" />
+
+
+  
 
 <style>
   *{
@@ -35,27 +39,8 @@
     background-color: black;
     color: #fff;
   }
-  .dropdown {
-  position: relative;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 10px;
-  background-color: #333;
-  min-width: 150px;
-  border-radius: 5px;
-}
-.dropdown-menu li {
-  padding: 10px;
-  color: white;
-}
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-.right{
+ 
+.left{
     margin-top: 5px;
     margin-right: 50%;
     margin-left: 20px;
@@ -80,24 +65,22 @@ label {
     border-radius: 30px;
    }
 
+
+
        
 </style>
 
-
   </head>
+  <billing>
+  <includes>
+  <nav class="php"></nav>
   <body>
+   
     <section class="container">
       <div class="nav">
         <div class="box">
           <a href="#">INVOICE</a>
-          <a class="menu-item dropdown">
-            EDIT ITEMS
-            <ul class="dropdown-menu">
-              <li>example</li>
-              <li>example</li>
-              <li>example</li>
-            </ul>
-          </a>
+          <a href="#">EDIT ITEM</a>
           <a href="#">EDIT SELLER INFO</a>
           <a href="#">CUSTOMER DETAIL</a>
         </div>
