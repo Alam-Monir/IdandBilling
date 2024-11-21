@@ -4,71 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Billing</title>
-  <style>
-    * {
-      margin: 0;
-      box-sizing: border-box;
-    }
-
-    a {
-      text-decoration: none;
-      color: black;
-    }
-
-    .nav {
-      margin-top: 5px;
-      background: #fff;
-      padding: 30px 200px;
-      border: solid black 3px;
-    }
-
-    .nav .box {
-      display: flex;
-      font-weight: 600;
-      justify-content: space-between;
-      gap: 30px;
-    }
-
-    .box a {
-      border-radius: 10px;
-      border: solid black;
-      padding: 5px;
-    }
-
-    .box a:hover {
-      background-color: black;
-      color: #fff;
-    }
-
-    .left {
-      margin-top: 5px;
-      margin-right: 50%;
-      margin-left: 20px;
-      margin-bottom: auto;
-      background: #fff;
-      padding: 30px 200px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-      border-radius: 10px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 100px;
-      border: 1px solid #ccc;
-      border-radius: 30px;
-    }
-  </style>
-
 </head>
+
     <body>
       <?php include "includes/nav.php" ?>
+      <?php include "style.css" ?>
       <section class="container">
         <div class="nav">
           <div class="box">
