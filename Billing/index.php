@@ -1,114 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Billing</title>
-    <link href="Billing/includes/nav.php" rel="stylesheet" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billing</title>
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+    }
 
+    a {
+      text-decoration: none;
+      color: black;
+    }
 
-  
+    .nav {
+      margin-top: 5px;
+      background: #fff;
+      padding: 30px 200px;
+      border: solid black 3px;
+    }
 
-<style>
-  *{
-    margin: 0;
-    box-sizing: border-box;
-  }
-  a{
-    text-decoration: none;
-    color: black;
-  }
-  .nav{
-    margin-top: 5px;
-    background: #fff;
-    padding: 30px 200px;
-    border: solid black 3px;
-  }
-  .nav .box{
-    display: flex;
-    font-weight: 600;
-    justify-content: space-between;
-    gap: 30px;
-  }
-  .box a{
-    border-radius: 10px;
-    border: solid black;
-    padding: 5px;
-  }
-  .box a:hover{
-    background-color: black;
-    color: #fff;
-  }
- 
-.left{
-    margin-top: 5px;
-    margin-right: 50%;
-    margin-left: 20px;
-    margin-bottom: auto;
-    background: #fff;
-    padding: 30px 200px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-}
+    .nav .box {
+      display: flex;
+      font-weight: 600;
+      justify-content: space-between;
+      gap: 30px;
+    }
 
-label {
-       display: block;
-       margin-bottom: 5px;
-       font-weight: bold;
-      }
+    .box a {
+      border-radius: 10px;
+      border: solid black;
+      padding: 5px;
+    }
 
- input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 100px;
-    border: 1px solid #ccc;
-    border-radius: 30px;
-   }
+    .box a:hover {
+      background-color: black;
+      color: #fff;
+    }
 
+    .left {
+      margin-top: 5px;
+      margin-right: 50%;
+      margin-left: 20px;
+      margin-bottom: auto;
+      background: #fff;
+      padding: 30px 200px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
 
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
 
-       
-</style>
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 100px;
+      border: 1px solid #ccc;
+      border-radius: 30px;
+    }
+  </style>
 
-  </head>
-  <billing>
-  <includes>
-  <nav class="php"></nav>
-  <body>
-   
-    <section class="container">
-      <div class="nav">
-        <div class="box">
-          <a href="#">INVOICE</a>
-          <a href="#">EDIT ITEM</a>
-          <a href="#">EDIT SELLER INFO</a>
-          <a href="#">CUSTOMER DETAIL</a>
+</head>
+    <body>
+      <?php include "includes/nav.php" ?>
+      <section class="container">
+        <div class="nav">
+          <div class="box">
+            <a href="#">INVOICE</a>
+            <a href="#">EDIT ITEM</a>
+            <a href="#">EDIT SELLER INFO</a>
+            <a href="#">CUSTOMER DETAIL</a>
+          </div>
         </div>
-      </div>
-    </section>
-    <section class="container">
-      <div class="left">
-        <input type="text" name="username" placeholder="Customer Name">
-        <input type="text" name="Customer" placeholder="Customer Detail">
-        <input list="item-options" id="item" name="item" placeholder="Item Detail">
-         <datalist id="item-options">
-         <option value="land">
-         <option value="land">
-         <option value="land">
-         <option value="land">
-         <option value="land">
-         </datalist>
-         <input type="text" name="Quantity" placeholder="Quantity">
-              
-      </div>
-    </section>
+      </section>
+      <section class="container">
+        <div class="left">
+          <input type="text" name="username" placeholder="Customer Name">
+          <input type="text" name="Customer" placeholder="Customer Detail">
+          <input list="item-options" id="item" name="item" placeholder="Item Detail">
+          <datalist id="item-options">
+            <option value="land">
+            <option value="land">
+            <option value="land">
+            <option value="land">
+            <option value="land">
+          </datalist>
+          <input type="text" name="Quantity" placeholder="Quantity">
 
-  <section class="container">
-    <div class="right">
+        </div>
+      </section>
 
-    </div>
-  </section>
+      <section class="container">
+        <div class="right">
+
+        </div>
+      </section>
 
 
-  </body>
+    </body>
+
 </html>
