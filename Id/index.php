@@ -1,66 +1,224 @@
 <?php
 include("includes/header.php");
 include("includes/nav.php");
+include("../config/dbcon.php");
+
+function prepareImageUrl($imageUrl)
+{
+  $imageUrl = preg_replace('/^\.\.\/\.\.\//', '', $imageUrl);
+  return htmlspecialchars("id/" . $imageUrl);
+}
 ?>
-<div class="d-flex justify-content-around">
-    <div id="cardLayout"
-        class="card mx-auto d-flex flex-column"
-        style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; position: relative; transition: all 0.3s ease;">
-        
-        <!-- Card content here (existing elements) -->
-        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
-            <img id="logo" src="img/img_placeholder.png" alt="School Logo" style="width: 80px; height: 80px;">
-            <h3 id="SchoolName" class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">School Name</h3>
-            <p id="SchoolAddress" class="card-text pb-2" style="font-size: 0.8rem; color: #666666; line-height: 0.8;">
-                School Address
-            </p>
-            <img id="profileImg" src="img/profileImage.jpg" alt="Student Image" style="width: 140px; height: 160px;">
-            <h3 id="StudentName" class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Name</h3>
-            <h3 id="StudentClass" class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Class</h3>
-        </div>
-        <div id="details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">
-            <p id="dob" class="card-text pb-1 px-2">
-                Date of Birth :
-            </p>
-            <p id="bGroup" class="card-text pb-1 px-2">
-                Blood Group :
-            </p>
-            <p id="father" class="card-text pb-0 px-2">
-                Father's Name :
-            </p>
-            <p id="add" class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">
-                Address : Jirania, Joynagar, Delhiwala PetrolPump, West Tripura, 799045
-            </p>
-            <p id="phNo" class="card-text pb-2 px-2">
-                Contact :
-            </p>
-        </div>
+<style>
+  .card {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    margin: 20px;
+  }
 
-        <!-- Button container (for Edit and Fill Data) -->
-        <div id="buttonContainer" class="d-flex justify-content-center align-items-center"
-            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); gap: 10px; visibility: hidden;">
-            <button id="editBtn" class="btn btn-primary">Edit</button>
-            <button id="fillDataBtn" class="btn btn-primary">Fill Data</button>
-        </div>
+  .card .card-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
 
-        <!-- Bottom signature -->
-        <div style="position: relative; height: 100vh;">
-            <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
-                <img id="sign" src="img/img_placeholder.png" alt="Principal Sign" style="width: 60px; height: 30px;">
-            </div>
+  .card:hover .card-overlay {
+    opacity: 1;
+  }
+
+  .card-overlay button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+  .card .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .card .card-details {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #666666;
+    line-height: 0.1;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .card-overlay h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="deleteForm" action="backend.php" method="POST">
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="layoutName" id="deletelayoutName" value="">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body text-truncate">
+          Are you sure you want to delete <strong id="layoutToDelete"></strong>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelButton" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
-<!-- Inline CSS for hover effect -->
+
+<!-- Id Card Layouts -->
+<div class="d-flex justify-content-around">
+  <div id="cardContainer" class="d-flex flex-wrap justify-content-center">
+    <?php
+    try {
+      $stmt = $pdo->query("SELECT * FROM idLayout");
+
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $schoolLogo = prepareImageUrl($row['logo']);
+        $principalSign = prepareImageUrl($row['sign']);
+        $bgImage = prepareImageUrl($row['bgImage']);
+
+        $id = htmlspecialchars($row['id']);
+        $schoolName = htmlspecialchars($row['schoolName']);
+        $schoolAddress = htmlspecialchars($row['schoolAdd']);
+        $layoutName = htmlspecialchars($row['layoutName']);
+
+        echo <<<HTML
+                <div class="card px-auto d-flex flex-column"
+                    style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; transition: all 0.3s ease; background-image: url('$bgImage'); background-size: cover; background-position: center; background-repeat: no-repeat; margin: 20px; position: relative;">
+                    
+                    <!-- Card content -->
+                    <div class="card-content" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; padding: 10px; border-radius: 8px;">
+                        <img src="$schoolLogo" alt="School Logo" style="width: 80px; height: 80px;">
+                        <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">$schoolName</h3>
+                        <p class="card-text pb-2" style="font-size: 0.8rem; color: #666666; line-height: 0.8;">$schoolAddress</p>
+                        <img src="img/profileImage.jpg" alt="Student Image" style="width: 140px; height: 160px;">
+                        <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Name</h3>
+                        <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Class</h3>
+                    </div>
+
+                    <!-- Layout name, Edit Layout, and Fill Details buttons -->
+                    <div class="card-overlay">
+                        <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
+                        <div>
+                            <button class="btn btn-primary edit-button" data-id="$id" style="margin: 5px;">Edit Layout</button>
+                            <button class="btn btn-secondary" id="fillButton" style="margin: 5px;">Fill Details</button>
+                            <button class="btn btn-danger delete-button" 
+                              data-bs-toggle="modal" 
+                              data-bs-target="#deleteModal" 
+                              data-layout-name="$layoutName"
+                            >
+                              Delete
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <!-- Card details -->
+                    <div class="card-details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1; padding: 10px; border-radius: 8px;">
+                        <p class="card-text pb-1 px-2">Date of Birth: </p>
+                        <p class="card-text pb-1 px-2">Blood Group: </p>
+                        <p class="card-text pb-0 px-2">Father's Name: </p>
+                        <p class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">Address: </p>
+                        <p class="card-text pb-2 px-2">Contact: </p>
+                    </div>
+
+                    <div style="position: relative; height: 100vh;">
+                        <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
+                            <img src="$principalSign" alt="Principal Sign" style="width: 60px; height: 30px;">
+                        </div>
+                    </div>
+                </div>
+                HTML;
+      }
+    } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+    }
+    ?>
+  </div>
+</div>
+
 <script>
-    document.getElementById('cardLayout').addEventListener('mouseenter', function() {
-        document.getElementById('buttonContainer').style.visibility = 'visible';
+  document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const layoutName = button.getAttribute('data-layout-name');
+        document.getElementById('deletelayoutName').value = layoutName;
+        document.getElementById('layoutToDelete').textContent = layoutName;
+      });
     });
-    document.getElementById('cardLayout').addEventListener('mouseleave', function() {
-        document.getElementById('buttonContainer').style.visibility = 'hidden';
+  });
+
+  document.getElementById("deleteForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    fetch("backend.php", {
+        method: "POST",
+        body: formData,
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          alert(data.message);
+          location.reload();
+        } else {
+          alert(data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred while processing the request.");
+      });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.edit-button');
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const layoutId = button.getAttribute('data-id');
+        window.location.href = `edit/?id=${layoutId}`;
+      });
     });
+  });
 </script>
 
 
-<?php include("includes/footer.php") ?>
+
+<?php include("includes/footer.php"); ?>

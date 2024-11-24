@@ -137,7 +137,7 @@ include("../includes/nav.php");
     });
 
     document.getElementById('layoutForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
+        event.preventDefault();
 
         const form = document.getElementById('layoutForm');
         const formData = new FormData(form);
@@ -150,12 +150,12 @@ include("../includes/nav.php");
             .then(data => {
                 if (data.success) {
                     alert('Layout saved successfully!');
-                    form.reset(); // Reset the form after successful submission
+                    form.reset();
                 } else {
                     alert(`Error: ${data.message}`);
                 }
 
-                window.location.reload(); // Optionally reload the page to reflect changes
+                window.location.reload();
             })
             .catch(error => {
                 alert(`Error: ${error.message}`);
@@ -163,7 +163,7 @@ include("../includes/nav.php");
     });
 
     document.getElementById('cancelButton').addEventListener('click', function() {
-        document.getElementById('layoutForm').reset(); // Reset the form on cancel
+        document.getElementById('layoutForm').reset();
     });
 </script>
 
