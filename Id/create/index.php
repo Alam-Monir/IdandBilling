@@ -46,8 +46,14 @@ include("../includes/nav.php");
     <!-- Create Modal -->
     <div
         class="card mx-auto d-flex flex-column"
-        style="max-width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow-y: auto; background-color: #ffffff;">
+        style="max-width: 400px; height: 620px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow-y: auto; background-color: #ffffff;">
         <form id="layoutForm" action="saveLayout.php" method="POST" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+                <select class="form-select" id="layoutType" name="layoutType" required>
+                    <option value="Student" selected>Student</option>
+                    <option value="Teacher">Teacher</option>
+                </select>
+            </div>
             <div class="form-floating mb-3">
                 <input type="text" id="layoutName" class="form-control" name="layoutName" placeholder="" required>
                 <label for="floatingInput">Enter Layout Name</label>

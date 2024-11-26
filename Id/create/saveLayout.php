@@ -1,15 +1,15 @@
 <?php
-require '../../config/dbcon.php'; // Ensure you have a PDO connection in this file
+require '../../config/dbcon.php';
 
 $response = ['success' => false, 'message' => ''];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
+        $layoutType = $_POST['layoutType'];
         $layoutName = $_POST['layoutName'];
         $schoolName = $_POST['schoolName'];
         $schoolAddress = $_POST['schoolAddress'];
 
-        // File upload handling
         $bgImage = null;
         $schoolLogo = null;
         $principalSign = null;
@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($_FILES['principalSign']['tmp_name'], $principalSign);
         }
 
-        // Insert into the database
-        $query = "INSERT INTO idLayout (id, layoutName, schoolName, schoolAdd, bgImage, logo, sign, createdAt, updatedAt)
-                  VALUES (UUID(), :layoutName, :schoolName, :schoolAddress, :bgImage, :logo, :sign, NOW(), NOW())";
+        $query = "INSERT INTO idLayout (id, layoutType, layoutName, schoolName, schoolAdd, bgImage, logo, sign, createdAt, updatedAt)
+                  VALUES (UUID(), :layoutType, :layoutName, :schoolName, :schoolAddress, :bgImage, :logo, :sign, NOW(), NOW())";
 
         $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':layoutType', $layoutType);
         $stmt->bindParam(':layoutName', $layoutName);
         $stmt->bindParam(':schoolName', $schoolName);
         $stmt->bindParam(':schoolAddress', $schoolAddress);
@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response['message'] = 'Invalid request method.';
 }
 
-// Return JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
 ?>
