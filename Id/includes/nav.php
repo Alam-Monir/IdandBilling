@@ -27,6 +27,10 @@
         button.textContent = 'Home';
         buttonLink.href = '/idandbilling/Id/';
         head.textContent = ' Edit Id Layout';
+    } else if (currentPath === '/idandbilling/Id/populate/') {
+        button.textContent = 'Home';
+        buttonLink.href = '/idandbilling/Id/';
+        head.textContent = ' Fill Details';
     } else {
         button.textContent = 'Home';
         buttonLink.href = '/idandbilling/Id/';
