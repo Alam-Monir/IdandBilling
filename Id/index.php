@@ -135,7 +135,7 @@ function prepareImageUrl($imageUrl)
                         <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
                         <div>
                             <button class="btn btn-primary edit-button" data-id="$id" style="margin: 5px;">Edit Layout</button>
-                            <button class="btn btn-secondary" id="fillButton" style="margin: 5px;">Fill Details</button>
+                            <button class="btn btn-secondary fill-button" data-id="$id" style="margin: 5px;">Fill Details</button>
                             <button class="btn btn-danger delete-button" 
                               data-bs-toggle="modal" 
                               data-bs-target="#deleteModal" 
@@ -214,6 +214,17 @@ function prepareImageUrl($imageUrl)
       button.addEventListener('click', () => {
         const layoutId = button.getAttribute('data-id');
         window.location.href = `edit/?id=${layoutId}`;
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.fill-button');
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const layoutId = button.getAttribute('data-id');
+        window.location.href = `populate/?id=${layoutId}`;
       });
     });
   });

@@ -126,8 +126,7 @@ $layoutName = htmlspecialchars($row['layoutName']);
             saveButton.disabled = false;
         });
 
-        form.addEventListener('submit', function(event) {
-        });
+        form.addEventListener('submit', function(event) {});
     });
 
     document.getElementById('layoutForm').addEventListener('submit', async function(event) {
@@ -154,6 +153,10 @@ $layoutName = htmlspecialchars($row['layoutName']);
             console.error('Error:', error);
             alert('An error occurred while submitting the form.');
         }
+    });
+
+    document.getElementById('cancelButton').addEventListener('click', function() {
+        window.location.href = '../';
     });
 </script>
 

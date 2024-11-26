@@ -165,6 +165,10 @@ include("../includes/nav.php");
     document.getElementById('cancelButton').addEventListener('click', function() {
         document.getElementById('layoutForm').reset();
     });
+
+    document.getElementById('cancelButton').addEventListener('click', function() {
+        window.location.href = '../';
+    });
 </script>
 
 
