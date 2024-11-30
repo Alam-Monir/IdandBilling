@@ -12,6 +12,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link href="/idandbilling/assets/css/bootstrap-icons.min.css" rel="stylesheet"/>
     <title>Id</title>
   </head>
   <body>

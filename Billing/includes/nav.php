@@ -34,7 +34,8 @@
     background-color: black;
     color: #fff;
   }
-/* 
+
+  /* 
   .navbar .active {
     background-color: red;
     color: #fff;
@@ -73,11 +74,11 @@
 <section class="container1">
   <div class="nav1">
     <ul class="navbar">
+      <li><a href="/idandbilling/" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
       <li><a href="/idandbilling/billing" class="nav-link">INVOICE</a></li>
-      <li><a href="/idandbilling/billing/editItems/" class="nav-link">EDIT ITEMS</a></li>
-      <li><a href="/idandbilling/billing/editsellerinfo/" class="nav-link">EDIT SELLER INFO</a></li>
+      <li><a href="/idandbilling/billing/editItems/" class="nav-link">ITEMS</a></li>
+      <li><a href="/idandbilling/billing/editsellerinfo/" class="nav-link">SELLER INFO</a></li>
       <li><a href="/idandbilling/billing/customerdetails/" class="nav-link">CUSTOMER DETAILS</a></li>
     </ul>
-
   </div>
 </section>
