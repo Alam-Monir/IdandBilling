@@ -17,14 +17,14 @@
     <div class="mb-3 form-check">
     </div>
     <div class="mb-4">
-      <button class="btn btn-primary ms-4 m-lg-2">Save</button>
+      <button class="btn btn-success m-lg-2">Save</button>
     </div>
 
     
     <label for="item-Name" class="form-label" style="margin: 15px;" ;>Delete item</label>
     <input type="text" class="form-control" placeholder="Enter Item Name">
     <div class="mt-3">
-    <button type="button" class="btn btn-danger m-lg-2">Delete</button>
+    <button class="btn btn-danger m-lg-2">Delete</button>
     </div>
 
   </form>
@@ -34,7 +34,7 @@
 <!--right container-->
 
 <div class="w-50 p-5 mt-5 shadow bg-body-tertiary m-lg-1">  
-<div class="d-flex justify-content-center mb-5">items</div> 
+<div class="d-flex justify-content-center mb-5">Items</div> 
 <table class="table">
   <thead>
     <tr>
