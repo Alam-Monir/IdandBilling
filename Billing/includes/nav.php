@@ -76,7 +76,7 @@
       <li><a href="/idandbilling/billing" class="nav-link">INVOICE</a></li>
       <li><a href="/idandbilling/billing/editItems/" class="nav-link">EDIT ITEMS</a></li>
       <li><a href="/idandbilling/billing/editsellerinfo/" class="nav-link">EDIT SELLER INFO</a></li>
-      <li><a href="#contact" class="nav-link">CUSTOMER DETAILS</a></li>
+      <li><a href="/idandbilling/billing/customerdetails/" class="nav-link">CUSTOMER DETAILS</a></li>
     </ul>
 
   </div>

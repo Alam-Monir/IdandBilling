@@ -6,7 +6,7 @@
 <div class="d-flex flex-row bd-highlight mb-1">
 <div class="w-50 p-5 mt-5 shadow bg-body-tertiary m-lg-1">
   <form class="rounded-3">
-    <div class="d-flex justify-content-center">Edit items</div>
+    <div class="d-flex justify-content-center">Edit Items</div>
     <div class="mb-3 m-lg-1" style="margin: auto 15px auto 15px;">
       <label for="item-Name" class="form-label" style="margin: 15px ;">Create New Item</label>
       <input type="text" class="form-control" placeholder="Item Name">
@@ -21,7 +21,7 @@
     </div>
 
     
-    <label for="item-Name" class="form-label" style="margin: 15px;" ;>Delete item</label>
+    <label for="item-Name" class="form-label" style="margin: 15px;" ;>Delete Item</label>
     <input type="text" class="form-control" placeholder="Enter Item Name">
     <div class="mt-3">
     <button class="btn btn-danger m-lg-2">Delete</button>

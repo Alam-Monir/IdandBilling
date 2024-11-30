@@ -4,10 +4,10 @@
 <div class="d-flex justify-content-center mt-3">
 <div class="w-50 p-5 ml-5 shadow bg-body-tertiary">
 <form class="rounded-3">
-<div class="d-flex justify-content-center">Edit items</div>
+<div class="d-flex justify-content-center">Edit Items</div>
 <input type="text" class="form-control mt-5" placeholder="Seller Name">
 <input type="text" class="form-control mt-3" placeholder="Seller Contact">
-<input type="number" class="form-control mt-3" id="numberInput" step="0" placeholder=" Seller GST NO">
+<input type="text" class="form-control mt-3" placeholder="GST No">
 <div class="form-floating">
   <textarea class="form-control mt-3" placeholder="Seller Address" id="floatingTextarea2" style="height: 100px"></textarea>
   <label for="floatingTextarea2">Seller Address</label>
