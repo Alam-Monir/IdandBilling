@@ -6,7 +6,7 @@
 <div class="d-flex flex-row bd-highlight mb-1">
 <div class="w-50 p-5 mt-5 shadow bg-body-tertiary m-lg-1">
   <form class="rounded-3">
-    <div class="d-flex justify-content-center">Customer Details</div>
+    <div class="d-flex justify-content-center fw-bold">Customer Details</div>
     
      
       <input type="text" class="form-control mt-3" placeholder="Customer Name">
@@ -29,7 +29,7 @@
 <!--right container-->
 
 <div class="w-50 p-5 mt-5 shadow bg-body-tertiary m-lg-1">  
-<div class="d-flex justify-content-center mb-5">Save Customers</div> 
+<div class="d-flex justify-content-center mb-5 fw-bold">Save Customers</div> 
 <table class="table">
   <thead>
     <tr>
