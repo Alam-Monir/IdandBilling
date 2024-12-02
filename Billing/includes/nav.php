@@ -17,13 +17,6 @@
     justify-content: space-between;
   }
 
-  /* .navbar {
-    display: flex;
-    font-weight: 600;
-    justify-content: space-between;
-    gap: 30px;
-  } */
-
   .navbar a {
     border-radius: 10px;
     border: solid black;
@@ -34,12 +27,6 @@
     background-color: black;
     color: #fff;
   }
-
-  /* 
-  .navbar .active {
-    background-color: red;
-    color: #fff;
-  } */
 
   .navbar {
     display: flex;
@@ -65,9 +52,8 @@
     display: block;
   }
 
-
-  .navbar .active {
-    background-color: red;
+  .nav-link.active {
+    background-color: black;
     color: white;
   }
 </style>
@@ -82,3 +68,15 @@
     </ul>
   </div>
 </section>
+
+<script>
+  const currentPath = window.location.pathname;
+
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  navLinks.forEach(link => {
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("active");
+    }
+  });
+</script>
