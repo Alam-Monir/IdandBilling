@@ -23,7 +23,7 @@
     padding: 5px;
   }
 
-  .navbar a:hover {
+  .nav1 a:hover {
     background-color: black;
     color: #fff;
   }
