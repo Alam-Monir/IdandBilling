@@ -70,13 +70,25 @@
 </section>
 
 <script>
-  const currentPath = window.location.pathname;
+  // Get the current URL path
+  const currentPath = window.location.pathname.replace(/\/$/, ""); // Remove trailing slash if present
 
+  // Select all nav links
   const navLinks = document.querySelectorAll(".nav-link");
 
+  // Check the condition for setting the active class
   navLinks.forEach(link => {
-    if (link.getAttribute("href") === currentPath) {
+    const href = link.getAttribute("href").replace(/\/$/, ""); // Remove trailing slash for consistency
+
+    // Set active if navigating to "/idandbilling/billing/"
+    if (href === currentPath || (currentPath === "/idandbilling" && href === "/idandbilling/billing")) {
+      // Remove active class from all links first
+      navLinks.forEach(l => l.classList.remove("active"));
+      
+      // Add active class to the current link
       link.classList.add("active");
     }
   });
 </script>
+
+
