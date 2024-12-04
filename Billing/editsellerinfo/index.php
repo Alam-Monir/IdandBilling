@@ -5,9 +5,18 @@
   <div class="w-50 p-5 ml-5 shadow bg-body-tertiary">
     <form id="sellerInfo" class="rounded-3">
       <div class="d-flex justify-content-center fw-bold">Edit Seller Info</div>
-      <input type="text" id="sellerName" class="form-control mt-5" placeholder="Seller Name">
-      <input type="text" id="sellerContact" class="form-control mt-3" placeholder="Contact">
-      <input type="text" id="gstNo" class="form-control mt-3" placeholder="GST No">
+      <div class="form-floating">
+        <input type="text" id="sellerName" class="form-control mt-5" placeholder="Seller Name">
+        <label for="sellerName">Seller Name</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" id="sellerContact" class="form-control mt-3" placeholder="Contact">
+        <label for="sellerContact">Contact</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" id="gstNo" class="form-control mt-3" placeholder="">
+        <label for="gstNo">GST No.</label>
+      </div>
       <div class="form-floating">
         <textarea class="form-control mt-3" id="sellerAddress" placeholder="Address" style="height: 100px"></textarea>
         <label for="sellerAddress">Address</label>
