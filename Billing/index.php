@@ -12,7 +12,7 @@ include('includes/nav.php');
         <input type="text" id="sellerName" class="form-control mt-4" placeholder="items">
 
         <div class="d-flex mt-3 grid gap-0 column-gap-3">
-            <button type="button" class="btn btn-primary ">Cancel</button>
+            <button type="button" class="btn btn-danger ">Cancel</button>
             <button type="button" class="btn btn-success">Export</button>
         </div>
     </div>
