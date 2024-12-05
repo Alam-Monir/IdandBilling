@@ -115,54 +115,94 @@ function prepareImageUrl($imageUrl)
         $schoolName = htmlspecialchars($row['schoolName']);
         $schoolAddress = htmlspecialchars($row['schoolAdd']);
         $layoutName = htmlspecialchars($row['layoutName']);
+        $layoutType = htmlspecialchars($row['layoutType']);
 
+        // Common card styles
         echo <<<HTML
-                <div class="card px-auto d-flex flex-column"
-                    style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; transition: all 0.3s ease; background-image: url('$bgImage'); background-size: cover; background-position: center; background-repeat: no-repeat; margin: 20px; position: relative;">
-                    
-                    <!-- Card content -->
-                    <div class="card-content" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; padding: 10px; border-radius: 8px;">
-                        <img src="$schoolLogo" alt="School Logo" style="width: 80px; height: 80px;">
-                        <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">$schoolName</h3>
-                        <p class="card-text pb-2" style="font-size: 0.8rem; color: #666666; line-height: 0.8;">$schoolAddress</p>
-                        <img src="img/profileImage.jpg" alt="Student Image" style="width: 140px; height: 160px;">
-                        <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Name</h3>
-                        <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Class</h3>
+            <div class="card px-auto d-flex flex-column"
+                style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; transition: all 0.3s ease; background-image: url('$bgImage'); background-size: cover; background-position: center; background-repeat: no-repeat; margin: 20px; position: relative;">
+                
+                <div class="card-content" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; padding: 10px; border-radius: 8px;">
+                    <img src="$schoolLogo" alt="School Logo" style="width: 80px; height: 80px;">
+                    <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">$schoolName</h3>
+                    <p class="card-text pb-2" style="font-size: 0.8rem; color: #666666; line-height: 0.8;">$schoolAddress</p>
+                    <img src="img/profileImage.jpg" alt="Profile Image" style="width: 140px; height: 160px;">
+          HTML;
+
+        // Layout-specific content
+        if ($layoutType === 'Student') {
+          echo <<<HTML
+                    <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Student Name</h3>
+                    <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Class</h3>
+          HTML;
+        } elseif ($layoutType === 'Teacher') {
+          echo <<<HTML
+                    <p id="staffCard" class="card-text pb-2"
+                      style="position: absolute; top: 58%; left: 60px; transform: rotate(-90deg); font-size: 1.5rem; color: #666666; line-height: 0.8; transform-origin: left center;">
+                      Staff ID Card
+                    </p>
+                    <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Teacher Name</h3>
+                    <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Designation</h3>
+          HTML;
+        }
+
+        // Buttons and details
+        echo <<<HTML
+                    </div>
                     </div>
 
                     <!-- Layout name, Edit Layout, and Fill Details buttons -->
-                    <div class="card-overlay">
-                        <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
-                        <div>
-                            <button class="btn btn-primary edit-button" data-id="$id" style="margin: 5px;">Edit Layout</button>
-                            <button class="btn btn-secondary fill-button" data-id="$id" style="margin: 5px;">Fill Details</button>
-                            <button class="btn btn-danger delete-button" 
-                              data-bs-toggle="modal" 
-                              data-bs-target="#deleteModal" 
-                              data-layout-name="$layoutName"
-                            >
-                              Delete
-                            </button>
+                </div>
 
-                        </div>
-                    </div>
-
-                    <!-- Card details -->
-                    <div class="card-details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1; padding: 10px; border-radius: 8px;">
-                        <p class="card-text pb-1 px-2">Date of Birth: </p>
-                        <p class="card-text pb-1 px-2">Blood Group: </p>
-                        <p class="card-text pb-0 px-2">Father's Name: </p>
-                        <p class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">Address: </p>
-                        <p class="card-text pb-2 px-2">Contact: </p>
-                    </div>
-
-                    <div style="position: relative; height: 100vh;">
-                        <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
-                            <img src="$principalSign" alt="Principal Sign" style="width: 60px; height: 30px;">
-                        </div>
+                    <!-- Layout name, Edit Layout, and Fill Details buttons -->
+                <div class="card-overlay">
+                    <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
+                    <div>
+                        <button class="btn btn-primary edit-button" data-id="$id" style="margin: 5px;">Edit Layout</button>
+                        <button class="btn btn-secondary fill-button" data-id="$id" style="margin: 5px;">Fill Details</button>
+                        <button class="btn btn-danger delete-button" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteModal" 
+                            data-layout-name="$layoutName">
+                            Delete
+                        </button>
                     </div>
                 </div>
-                HTML;
+          HTML;
+        if ($layoutType === 'Student') {
+          echo <<<HTML
+                <div class="card-details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1; padding: 10px; border-radius: 8px;">
+                    <p class="card-text pb-1 px-2">Date of Birth: </p>
+                    <p class="card-text pb-1 px-2">Blood Group: </p>
+                    <p class="card-text pb-0 px-2">Father's Name: </p>
+                    <p class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">Address: </p>
+                    <p class="card-text pb-2 px-2">Contact: </p>
+                    <p class="card-text pb-0 px-2">Valid Upto :</p>
+                </div>
+                <div style="position: relative; height: 100vh;">
+                    <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
+                        <img src="$principalSign" alt="Principal Sign" style="width: 60px; height: 30px;">
+                    </div>
+                </div>
+            </div>
+            HTML;
+        } elseif ($layoutType === 'Teacher') {
+          echo <<<HTML
+                <div class="card-details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1; padding: 10px; border-radius: 8px;">
+                    <p class="card-text pb-1 px-2">Date of Birth: </p>
+                    <p class="card-text pb-1 px-2">Blood Group: </p>
+                    <p class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">Address: </p>
+                    <p class="card-text pb-2 px-2">Contact: </p>
+                    <p class="card-text pb-0 px-2">Valid Upto :</p>
+                </div>
+                <div style="position: relative; height: 100vh;">
+                    <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
+                        <img src="$principalSign" alt="Principal Sign" style="width: 60px; height: 30px;">
+                    </div>
+                </div>
+            </div>
+            HTML;
+        }
       }
     } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
