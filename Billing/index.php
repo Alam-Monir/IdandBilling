@@ -3,62 +3,82 @@ include('includes/header.php');
 include('includes/nav.php');
 ?>
 
-<div class="d-flex mt-3">
-
-    <div class="w-40 p-5 ml-5 shadow bg-body-tertiary" style="height: 100vh;">
-        <div class="d-flex justify-content-center fw-bold">Customer Details</div>
-        <input type="text" id="sellerName" class="form-control mt-5" placeholder="Customer Name">
-        <input type="text" id="sellerName" class="form-control mt-4" placeholder="contact">
-        <input type="text" id="sellerName" class="form-control mt-4" placeholder="items">
-
-        <div class="d-flex mt-3 grid gap-0 column-gap-3">
-        <button type="button" class="btn btn-outline-danger">Cancel</button>
-        <button type="button" class="btn btn-outline-primary">Export</button>
+<div class="w-100 p-5 ml-5 shadow bg-body-tertiary">
+<div class="container text-center card">
+  <div class="row">
+    <div class="col-sm-5 col-md-6 fw-bold mt-3">CHOKELENG GRAPHIC
+        <div class="fw-normal mt-3 mb-3">
+            near don bosco agartala mark para<br>
+            dfkdkfgvgrdfkgvk<br>
+            email:ladbbduckdc<br>
+            ggst 77437247427e232753823755
         </div>
     </div>
-
-    <div class="w-100 shadow bg-body-tertiary">
-    <div class="d-flex justify-content-center fw-bold mb-5">Bill To Chokheleng </div>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Sl.no</th>
-                    <th scope="col">Item Name</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price/Unit</th>
-                    <th scope="col">GST</th>
-                    <th scope="col">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mimu</td>
-                    <td>nishan</td>
-                    <td>land</td>
-                    <td>shafru</td>
-                    <td>bishal</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>land</td>
-                    <td>land</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                    <td>land</td>
-                    <td>land</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 card position-relative">
+        <div class="card w-50 position-absolute top-0 start-0">invoice<br>36734337</div>
+       
+        <div class="card w-50 position-absolute top-0 end-0">Date<br>12/12/12</div>
+       
     </div>
+  </div>
 
+  <table class="table mt-5">
+  <thead>
+    <tr>
+      <th scope="col">SL.no</th>
+      <th scope="col">Item Name</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Price</th>
+      <th scope="col">GST</th>
+      <th scope="col">Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>gandu</td>
+      <td>1</td>
+      <td>15</td>
+      <td>lk34hh67</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>lipika</td>
+      <td>bhabhi hain ha mara</td>
+      <td>(not for seal) book by shafru</td>
+      <td>shafru phone no</td>
+      <td>out of range</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>shafru</td>
+      <td>1</td>
+      <td>12</td>
+      <td>1hfh64gh</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>shafru</td>
+      <td>1</td>
+      <td>12</td>
+      <td>1hfh64gh</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="card mb-5">
+    <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0">Invoice in words :</div>
+    <div class="fw-bold p-2 g-col-6 position-absolute  top-0 end-0">xgcgdgcgdwcfgewfukfdsufgvisgdfvigvigudfgidfugifugvifguvfiuer</div>
+</div>
+
+<div class="card">
+    <p class="bank-details">bank details</p>
+</div>
 
 </div>
+</div>
+
 <?php include('includes/footer.php') ?>
