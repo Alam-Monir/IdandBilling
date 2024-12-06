@@ -83,7 +83,7 @@ $layoutName = htmlspecialchars($row['layoutName']);
         style="width: 400px; height: 600px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow-y: auto; background-color: #ffffff;">
         <input type="hidden" name="layoutId" value="<?= $id ?>">
         <div class="section mb-2">
-            <h6>Upload Student Image:</h6>
+            <h6>Upload Staff Image:</h6>
             <input type="file" id="profileImgInput" name="profileImg" accept="image/*" alt="profileImg">
         </div>
         <div class="form-floating mb-2">
