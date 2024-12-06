@@ -3,7 +3,33 @@ include('includes/header.php');
 include('includes/nav.php');
 ?>
 
-<div class="w-100 p-5 ml-5 shadow bg-body-tertiary">
+<div class="card position-absolute start-0 shadow bg-body-tertiary h-100 " style="width: 40%;">
+
+<div class="card mt-5 h-50 d-flex align-items-center">
+<div class="form-floating w-50">
+        <input type="text" id="sellerContact" class="form-control mt-3" placeholder="Customer Name">
+        <label for="sellerContact">Customer Name</label>
+      </div>
+<div class="form-floating w-50">
+        <input type="text" id="sellerContact" class="form-control mt-3" placeholder="Customer contact">
+        <label for="sellerContact">Customer Contact</label>
+      </div>
+      <div class="form-floating w-50">
+        <input type="text" id="sellerContact" class="form-control mt-3" placeholder="Items">
+        <label for="sellerContact">Items Name</label>
+      </div>
+
+      <div class="d-grid gap-3 d-md-block mt-3">
+      <button type="button" class="btn btn-outline-danger">Cancel</button>
+      <button type="button" class="btn btn-outline-success">Export</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="w-60 p-5 ml-5 shadow bg-body-tertiary position-absolute end-0 h-100">
 <div class="container text-center card">
   <div class="row">
     <div class="col-sm-5 col-md-6 fw-bold mt-3">CHOKELENG GRAPHIC
@@ -71,7 +97,7 @@ include('includes/nav.php');
 
 <div class="card mb-5">
     <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0">Invoice in words :</div>
-    <div class="fw-bold p-2 g-col-6 position-absolute  top-0 end-0">xgcgdgcgdwcfgewfukfdsufgvisgdfvigvigudfgidfugifugvifguvfiuer</div>
+    <div class="fw-bold p-2 g-col-6 position-absolute  top-0 end-0">xgcgdgcgdwcfgeifguvfiuer</div>
 </div>
 
 <div class="card mb-5">
