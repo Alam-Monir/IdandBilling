@@ -45,7 +45,7 @@ $layoutName = htmlspecialchars($row['layoutName']);
                 Name
             </h3>
             <h3 id="StudentClass" class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">
-                Class
+                Class/Designation
             </h3>
         </div>
         <div id="details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">

@@ -1,9 +1,9 @@
 <?php
-include("../includes/header.php");
-include("../includes/nav.php");
+include("../../includes/header.php");
+include("../../includes/nav.php");
 ?>
 <?php
-include('../../config/dbcon.php');
+include('../../../config/dbcon.php');
 
 function prepareImageUrl($imageUrl)
 {
@@ -31,56 +31,59 @@ $layoutName = htmlspecialchars($row['layoutName']);
     <!-- Id Card -->
     <div id="cardLayout"
         class="card mx-auto d-flex flex-column"
-        style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; background-image: url('<?= $bgImage ?>'); background-size: cover; background-position: center;">
+        style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; background-image: url('<?= "../" . $bgImage ?>'); background-size: cover; background-position: center;">
         <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
-            <img id="logo" src="<?= $schoolLogo ?>" alt="School Logo" style="width: 80px; height: 80px;">
+            <img id="logo" src="<?= "../" . $schoolLogo ?>" alt="School Logo" style="width: 80px; height: 80px;">
             <h3 id="SchoolName" class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">
                 <?= $schoolName ?>
             </h3>
             <p id="SchoolAddress" class="card-text pb-2" style="font-size: 0.8rem; color: #666666; line-height: 0.8;">
                 <?= $schoolAddress ?>
             </p>
-            <img id="profileImgCard" src="../img/profileImage.jpg" alt="Student Image" style="width: 140px; height: 160px;">
+            <img id="profileImgCard" src="../../img/profileImage.jpg" alt="Student Image" style="width: 140px; height: 160px;">
+            <p id="staffCard" class="card-text pb-2"
+                style="position: absolute; top: 54%; left: 60px; transform: rotate(-90deg); font-size: 1.5rem; color: #666666; line-height: 0.8; transform-origin: left center;">
+                Staff ID Card
+            </p>
             <h3 id="StudentNameCard" class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">
                 Name
             </h3>
             <h3 id="StudentClassCard" class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">
-                Class
+                Designation
             </h3>
         </div>
-        <div id="details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">
+        <div id="details" class="pt-3" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">
             <p id="dobCard" class="card-text pb-1 px-2">
                 Date of Birth:
             </p>
-            <p id="bGroupCard" class="card-text pb-1 px-2">
+            <p id="bGroupCard" class="card-text px-2">
                 Blood Group:
             </p>
-            <p id="fatherCard" class="card-text pb-0 px-2">
-                Father's Name:
-            </p>
+            
             <p id="addCard" class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">
                 Address:
             </p>
             <p id="phNoCard" class="card-text pb-2 px-2">
                 Contact:
             </p>
+            <p id="validUpto" class="card-text pb-0 px-2">
+                Valid Upto :
+            </p>
         </div>
         <div style="position: relative; height: 100vh;">
             <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
-                <img id="sign" src="<?= $principalSign ?>" alt="Principal Sign" style="width: 60px; height: 30px;">
+                <img id="sign" src="<?= "../" . $principalSign ?>" alt="Principal Sign" style="width: 60px; height: 30px;">
             </div>
         </div>
     </div>
 
-
-
     <!-- Edit Modal -->
     <div
         class="card mx-auto d-flex flex-column"
-        style="width: 400px; height: 620px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow-y: auto; background-color: #ffffff;">
+        style="width: 400px; height: 600px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow-y: auto; background-color: #ffffff;">
         <input type="hidden" name="layoutId" value="<?= $id ?>">
         <div class="section mb-2">
-            <h5>Upload Student Image:</h5>
+            <h6>Upload Student Image:</h6>
             <input type="file" id="profileImgInput" name="profileImg" accept="image/*" alt="profileImg">
         </div>
         <div class="form-floating mb-2">
@@ -100,16 +103,16 @@ $layoutName = htmlspecialchars($row['layoutName']);
             <label for="bGroupInput">Enter Blood Group</label>
         </div>
         <div class="form-floating mb-2">
-            <input type="text" id="fatherInput" class="form-control" name="father" placeholder="" required>
-            <label for="fatherInput">Enter Father's Name</label>
-        </div>
-        <div class="form-floating mb-2">
             <input type="text" id="addInput" class="form-control" name="add" placeholder="" required>
             <label for="addInput">Enter Address</label>
         </div>
         <div class="form-floating mb-2">
             <input type="text" id="phNoInput" class="form-control" name="phNo" placeholder="" required>
             <label for="phNoInput">Enter Contact Number</label>
+        </div>
+        <div class="form-floating mb-2">
+            <input type="date" id="validity" class="form-control" name="validity" placeholder="" required>
+            <label for="validity">Valid Upto</label>
         </div>
 
         <div class="d-flex justify-content-evenly">
@@ -152,11 +155,6 @@ $layoutName = htmlspecialchars($row['layoutName']);
                 cardElement: document.getElementById('bGroupCard'),
                 label: 'Blood Group: ',
             },
-            father: {
-                input: document.getElementById('fatherInput'),
-                cardElement: document.getElementById('fatherCard'),
-                label: "Father's Name: ",
-            },
             add: {
                 input: document.getElementById('addInput'),
                 cardElement: document.getElementById('addCard'),
@@ -167,9 +165,23 @@ $layoutName = htmlspecialchars($row['layoutName']);
                 cardElement: document.getElementById('phNoCard'),
                 label: 'Contact: ',
             },
+            validUpto: {
+                input: document.getElementById('validity'),
+                cardElement: document.getElementById('validUpto'),
+                label: 'Valid Upto: ',
+                format: (value) => {
+                    const date = new Date(value);
+                    if (!isNaN(date)) {
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                        return `${day}-${month}-${year}`;
+                    }
+                    return value;
+                },
+            },
         };
 
-        // Update card content on input change
         Object.values(inputMappings).forEach(({
             input,
             cardElement,
@@ -182,7 +194,6 @@ $layoutName = htmlspecialchars($row['layoutName']);
             });
         });
 
-        // Handle profile image preview
         const profileImgInput = document.getElementById('profileImgInput');
         const profileImgCard = document.getElementById('profileImgCard');
 
@@ -197,11 +208,10 @@ $layoutName = htmlspecialchars($row['layoutName']);
             }
         });
 
-        // Handle cancel button action
         const cancelButton = document.getElementById('cancelButton');
         cancelButton.addEventListener('click', () => {
             if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
-                window.location.href = '../';
+                window.location.href = '../../';
             }
         });
     });
@@ -212,7 +222,6 @@ $layoutName = htmlspecialchars($row['layoutName']);
         exportButton.addEventListener('click', function() {
             const cardLayout = document.getElementById('cardLayout');
 
-            // Ensure html2canvas is loaded
             if (typeof html2canvas !== 'function') {
                 console.error('html2canvas is not loaded properly.');
                 return;
@@ -233,4 +242,4 @@ $layoutName = htmlspecialchars($row['layoutName']);
 
 
 
-<?php include("../includes/footer.php") ?>
+<?php include("../../includes/footer.php") ?>

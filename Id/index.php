@@ -76,7 +76,8 @@ function prepareImageUrl($imageUrl)
 </style>
 
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="deleteForm" action="backend.php" method="POST">
@@ -90,7 +91,8 @@ function prepareImageUrl($imageUrl)
           Are you sure you want to delete <strong id="layoutToDelete"></strong>?
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="cancelButton" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" id="cancelButton"
+            data-bs-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-danger">Delete</button>
         </div>
       </form>
@@ -134,24 +136,6 @@ function prepareImageUrl($imageUrl)
           echo <<<HTML
                     <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Student Name</h3>
                     <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Class</h3>
-          HTML;
-        } elseif ($layoutType === 'Teacher') {
-          echo <<<HTML
-                    <p id="staffCard" class="card-text pb-2"
-                      style="position: absolute; top: 58%; left: 60px; transform: rotate(-90deg); font-size: 1.5rem; color: #666666; line-height: 0.8; transform-origin: left center;">
-                      Staff ID Card
-                    </p>
-                    <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Teacher Name</h3>
-                    <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Designation</h3>
-          HTML;
-        }
-
-        // Buttons and details
-        echo <<<HTML
-                    </div>
-                    </div>
-
-                    <!-- Layout name, Edit Layout, and Fill Details buttons -->
                 </div>
 
                     <!-- Layout name, Edit Layout, and Fill Details buttons -->
@@ -159,7 +143,7 @@ function prepareImageUrl($imageUrl)
                     <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
                     <div>
                         <button class="btn btn-primary edit-button" data-id="$id" style="margin: 5px;">Edit Layout</button>
-                        <button class="btn btn-secondary fill-button" data-id="$id" style="margin: 5px;">Fill Details</button>
+                        <button class="btn btn-secondary student-fill-button" data-id="$id" style="margin: 5px;">Fill Details</button>
                         <button class="btn btn-danger delete-button" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteModal" 
@@ -168,9 +152,6 @@ function prepareImageUrl($imageUrl)
                         </button>
                     </div>
                 </div>
-          HTML;
-        if ($layoutType === 'Student') {
-          echo <<<HTML
                 <div class="card-details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1; padding: 10px; border-radius: 8px;">
                     <p class="card-text pb-1 px-2">Date of Birth: </p>
                     <p class="card-text pb-1 px-2">Blood Group: </p>
@@ -185,9 +166,29 @@ function prepareImageUrl($imageUrl)
                     </div>
                 </div>
             </div>
-            HTML;
+          HTML;
         } elseif ($layoutType === 'Teacher') {
           echo <<<HTML
+                    <p id="staffCard" class="card-text pb-2"
+                      style="position: absolute; top: 58%; left: 60px; transform: rotate(-90deg); font-size: 1.5rem; color: #666666; line-height: 0.8; transform-origin: left center;">
+                      Staff ID Card
+                    </p>
+                    <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Teacher Name</h3>
+                    <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Designation</h3>
+                </div>
+                <div class="card-overlay">
+                    <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
+                    <div>
+                        <button class="btn btn-primary edit-button" data-id="$id" style="margin: 5px;">Edit Layout</button>
+                        <button class="btn btn-secondary teacher-fill-button" data-id="$id" style="margin: 5px;">Fill Details</button>
+                        <button class="btn btn-danger delete-button" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteModal" 
+                            data-layout-name="$layoutName">
+                            Delete
+                        </button>
+                    </div>
+                </div>
                 <div class="card-details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1; padding: 10px; border-radius: 8px;">
                     <p class="card-text pb-1 px-2">Date of Birth: </p>
                     <p class="card-text pb-1 px-2">Blood Group: </p>
@@ -201,7 +202,7 @@ function prepareImageUrl($imageUrl)
                     </div>
                 </div>
             </div>
-            HTML;
+          HTML;
         }
       }
     } catch (PDOException $e) {
@@ -259,12 +260,22 @@ function prepareImageUrl($imageUrl)
   });
 
   document.addEventListener('DOMContentLoaded', () => {
-    const editButtons = document.querySelectorAll('.fill-button');
+    const editButtons = document.querySelectorAll('.student-fill-button');
 
     editButtons.forEach(button => {
       button.addEventListener('click', () => {
         const layoutId = button.getAttribute('data-id');
-        window.location.href = `populate/?id=${layoutId}`;
+        window.location.href = `populate/student/?id=${layoutId}`;
+      });
+    });
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    const editButtons = document.querySelectorAll('.teacher-fill-button');
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const layoutId = button.getAttribute('data-id');
+        window.location.href = `populate/teacher/?id=${layoutId}`;
       });
     });
   });
