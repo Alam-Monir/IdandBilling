@@ -14,7 +14,7 @@ include('includes/nav.php');
             ggst 77437247427e232753823755
         </div>
     </div>
-    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 card position-relative">
+    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 card position-relative mt-3">
         <div class="card w-50 position-absolute top-0 start-0">invoice<br>36734337</div>
        
         <div class="card w-50 position-absolute top-0 end-0">Date<br>12/12/12</div>
