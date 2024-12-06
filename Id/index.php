@@ -119,7 +119,6 @@ function prepareImageUrl($imageUrl)
         $layoutName = htmlspecialchars($row['layoutName']);
         $layoutType = htmlspecialchars($row['layoutType']);
 
-        // Common card styles
         echo <<<HTML
             <div class="card px-auto d-flex flex-column"
                 style="width: 400px; height: 600px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden; background-color: #ffffff; transition: all 0.3s ease; background-image: url('$bgImage'); background-size: cover; background-position: center; background-repeat: no-repeat; margin: 20px; position: relative;">
@@ -131,14 +130,12 @@ function prepareImageUrl($imageUrl)
                     <img src="img/profileImage.jpg" alt="Profile Image" style="width: 140px; height: 160px;">
           HTML;
 
-        // Layout-specific content
         if ($layoutType === 'Student') {
           echo <<<HTML
                     <h3 class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">Student Name</h3>
                     <h3 class="card-title" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;">Class</h3>
                 </div>
 
-                    <!-- Layout name, Edit Layout, and Fill Details buttons -->
                 <div class="card-overlay">
                     <h3 style="font-size: 1.2rem; font-weight: bold; color: white;">$layoutName</h3>
                     <div>

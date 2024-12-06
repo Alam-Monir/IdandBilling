@@ -19,6 +19,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $schoolLogo = prepareImageUrl($row['logo']);
 $principalSign = prepareImageUrl($row['sign']);
 $bgImage = prepareImageUrl($row['bgImage']);
+$layoutType = htmlspecialchars($row['layoutType']);
 
 $id = htmlspecialchars($row['id']);
 $schoolName = htmlspecialchars($row['schoolName']);
@@ -41,6 +42,13 @@ $layoutName = htmlspecialchars($row['layoutName']);
                 <?= $schoolAddress ?>
             </p>
             <img id="profileImg" src="../img/profileImage.jpg" alt="Student Image" style="width: 140px; height: 160px;">
+            <?php
+            if ($layoutType === 'Teacher') { ?>
+                <p id="staffCard" class="card-text pb-2"
+                    style="position: absolute; top: 58%; left: 60px; transform: rotate(-90deg); font-size: 1.5rem; color: #666666; line-height: 0.8; transform-origin: left center;">
+                    Staff ID Card
+                </p>
+            <?php } ?>
             <h3 id="StudentName" class="card-title mt-2" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 2px;">
                 Name
             </h3>
@@ -48,28 +56,55 @@ $layoutName = htmlspecialchars($row['layoutName']);
                 Class/Designation
             </h3>
         </div>
-        <div id="details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">
-            <p id="dob" class="card-text pb-1 px-2">
-                Date of Birth:
-            </p>
-            <p id="bGroup" class="card-text pb-1 px-2">
-                Blood Group:
-            </p>
-            <p id="father" class="card-text pb-0 px-2">
-                Father's Name:
-            </p>
-            <p id="add" class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">
-                Address: Jirania, Joynagar, Delhiwala PetrolPump, West Tripura, 799045
-            </p>
-            <p id="phNo" class="card-text pb-2 px-2">
-                Contact:
-            </p>
-        </div>
-        <div style="position: relative; height: 100vh;">
-            <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
-                <img id="sign" src="<?= $principalSign ?>" alt="Principal Sign" style="width: 60px; height: 30px;">
+        <?php
+        if ($layoutType === 'Student') { ?>
+
+            <div id="details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">
+                <p id="dob" class="card-text pb-1 px-2">
+                    Date of Birth:
+                </p>
+                <p id="bGroup" class="card-text pb-1 px-2">
+                    Blood Group:
+                </p>
+                <p id="father" class="card-text pb-0 px-2">
+                    Father's Name:
+                </p>
+                <p id="add" class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">
+                    Address: Jirania, Joynagar, Delhiwala PetrolPump, West Tripura, 799045
+                </p>
+                <p id="phNo" class="card-text pb-2 px-2">
+                    Contact:
+                </p>
             </div>
-        </div>
+            <div style="position: relative; height: 100vh;">
+                <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
+                    <img id="sign" src="<?= $principalSign ?>" alt="Principal Sign" style="width: 60px; height: 30px;">
+                </div>
+            </div>
+        <?php } elseif ($layoutType === 'Teacher') { ?>
+            <div id="details" style="font-size: 0.8rem; font-weight:bold; color: #666666; line-height: 0.1;">
+                <p id="dob" class="card-text pb-1 px-2">
+                    Date of Birth:
+                </p>
+                <p id="bGroup" class="card-text pb-1 px-2">
+                    Blood Group:
+                </p>
+                <p id="add" class="card-text pb-0 px-2" style="word-wrap: break-word; white-space: normal; line-height: 1.3;">
+                    Address: Jirania, Joynagar, Delhiwala PetrolPump, West Tripura, 799045
+                </p>
+                <p id="phNo" class="card-text pb-2 px-2">
+                    Contact:
+                </p>
+                <p id="validUpto" class="card-text pb-0 px-2">
+                    Valid Upto:
+                </p>
+            </div>
+            <div style="position: relative; height: 100vh;">
+                <div style="position: absolute; bottom: 0; right: 0; margin-top: 10px;">
+                    <img id="sign" src="<?= $principalSign ?>" alt="Principal Sign" style="width: 60px; height: 30px;">
+                </div>
+            </div>
+        <?php } ?>
     </div>
 
 
