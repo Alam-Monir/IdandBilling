@@ -88,11 +88,11 @@ $layoutName = htmlspecialchars($row['layoutName']);
         </div>
         <div class="form-floating mb-2">
             <input type="text" id="StudentNameInput" class="form-control" name="StudentName" placeholder="" required>
-            <label for="StudentNameInput">Enter Student Name</label>
+            <label for="StudentNameInput">Enter Staff Name</label>
         </div>
         <div class="form-floating mb-2">
             <input type="text" id="StudentClassInput" class="form-control" name="StudentClass" placeholder="" required>
-            <label for="StudentClassInput">Enter Class</label>
+            <label for="StudentClassInput">Enter Designation</label>
         </div>
         <div class="form-floating mb-2">
             <input id="dobInput" class="form-control" type="date" />
