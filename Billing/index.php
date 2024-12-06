@@ -5,7 +5,7 @@ include('includes/nav.php');
 
 <div class="card position-absolute start-0 shadow bg-body-tertiary h-100 " style="width: 40%;">
 
-    <div class="card mt-5 h-50 d-flex align-items-center">
+    <div class="card mt-5 d-flex align-items-center">
         <div class="form-floating w-50">
             <input type="text" id="sellerContact" class="form-control mt-3" placeholder="Customer Name">
             <label for="sellerContact">Customer Name</label>
@@ -19,7 +19,15 @@ include('includes/nav.php');
             <label for="sellerContact">Items Name</label>
         </div>
 
-        <div class="d-grid gap-3 d-md-block mt-3">
+        <div class="input-group mb-3 w-50 mt-4">
+            <select class="form-select" id="inputGroupSelect02">
+                <option disabled selected >  Select GST</option>
+                <option value="1">18%</option>
+                <option value="2">33%</option>
+            </select>
+        </div>
+
+        <div class="d-grid gap-3 d-md-block mt-3 mb-4">
             <button type="button" class="btn btn-outline-danger">Cancel</button>
             <button type="button" class="btn btn-outline-success">Export</button>
 
@@ -40,7 +48,7 @@ include('includes/nav.php');
                     ggst 77437247427e232753823755
                 </div>
             </div>
-            <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 card position-relative mt-3 ">
+            <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 card position-relative mt-3 mr-3">
                 <div class="card w-50 position-absolute top-0 start-0 fw-bold">invoice<br>36734337</div>
                 <div class="card w-50 position-absolute top-0 end-0 fw-bold">Date<br>12/12/12</div>
 
@@ -68,7 +76,7 @@ include('includes/nav.php');
             <tbody>
                 <tr>
                     <th scope="row">1</th>
-                    <td>gandu</td>
+                    <td>ganduuuuuuuuuuuuuuuuu</td>
                     <td>1</td>
                     <td>15</td>
                     <td>lk34hh67</td>
@@ -102,12 +110,12 @@ include('includes/nav.php');
         </table>
 
         <div class="card mb-5">
-            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0">Invoice in words :</div>
-            <div class="fw-bold p-2 g-col-6 position-absolute  top-0 end-0">xgcgdgcgdwcfgeifguvfiuer</div>
+            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0">Total Amount :</div>
+            <div class="fw-bold p-2 g-col-6 position-absolute top-0 end-0 px-5 m">455</div>
         </div>
 
         <div class="card mb-5">
-            <p class="bank-details">bank details</p>
+            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0">Invoice in words : jvscsvvfjevf</div>
         </div>
 
     </div>
