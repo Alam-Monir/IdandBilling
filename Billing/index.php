@@ -74,7 +74,7 @@ include('includes/nav.php');
     <div class="fw-bold p-2 g-col-6 position-absolute  top-0 end-0">xgcgdgcgdwcfgewfukfdsufgvisgdfvigvigudfgidfugifugvifguvfiuer</div>
 </div>
 
-<div class="card">
+<div class="card mb-5">
     <p class="bank-details">bank details</p>
 </div>
 
