@@ -76,7 +76,7 @@ include('includes/nav.php');
             <tbody>
                 <tr>
                     <th scope="row">1</th>
-                    <td>ganduuuuuuuuuuuuuuuuu</td>
+                    <td>laptop kkkk</td>
                     <td>1</td>
                     <td>15</td>
                     <td>lk34hh67</td>
