@@ -14,6 +14,10 @@
         <label for="sellerContact">Contact</label>
       </div>
       <div class="form-floating">
+        <input type="email" id="email" class="form-control mt-3" placeholder="email">
+        <label for="email">Email</label>
+      </div>
+      <div class="form-floating">
         <input type="text" id="gstNo" class="form-control mt-3" placeholder="">
         <label for="gstNo">GST No.</label>
       </div>
@@ -33,6 +37,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     const sellerName = document.getElementById('sellerName');
     const contact = document.getElementById('sellerContact');
+    const email = document.getElementById('email');
     const gstNo = document.getElementById('gstNo');
     const address = document.getElementById('sellerAddress');
     const saveBtn = document.getElementById('saveBtn');
@@ -48,12 +53,14 @@
         if (data) {
           sellerName.value = data.sellerName || '';
           contact.value = data.contact || '';
+          email.value = data.email || '';
           gstNo.value = data.gstNo || '';
           address.value = data.address || '';
 
           initialData = {
             sellerName: sellerName.value,
             contact: contact.value,
+            email: email.value,
             gstNo: gstNo.value,
             address: address.value
           };
@@ -66,6 +73,7 @@
       return (
         sellerName.value !== initialData.sellerName ||
         contact.value !== initialData.contact ||
+        contact.email !== initialData.email ||
         gstNo.value !== initialData.gstNo ||
         address.value !== initialData.address
       );
@@ -75,7 +83,7 @@
       saveBtn.disabled = !hasChanges();
     }
 
-    [sellerName, contact, gstNo, address].forEach(field => {
+    [sellerName, contact, email, gstNo, address].forEach(field => {
       field.addEventListener('input', toggleSaveButton);
     });
 
@@ -83,6 +91,7 @@
       const formData = new FormData();
       formData.append('sellerName', sellerName.value);
       formData.append('contact', contact.value);
+      formData.append('email', email.value);
       formData.append('gstNo', gstNo.value);
       formData.append('address', address.value);
 
@@ -101,6 +110,7 @@
           initialData = {
             sellerName: sellerName.value,
             contact: contact.value,
+            email: email.value,
             gstNo: gstNo.value,
             address: address.value
           };
@@ -112,6 +122,7 @@
     cancelBtn.addEventListener('click', function() {
       sellerName.value = '';
       contact.value = '';
+      email.value = '';
       gstNo.value = '';
       address.value = '';
       toggleSaveButton();
