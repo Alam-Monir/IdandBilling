@@ -120,7 +120,38 @@ include('../config/dbcon.php');
                 </tr>
             </thead>
             <tbody>
-                <!-- Initially empty rows, these will be updated -->
+                <tr>
+                    <th scope="row">1</th>
+                    <td>laptop kkkk</td>
+                    <td>1</td>
+                    <td>15</td>
+                    <td>lk34hh67</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>lipika</td>
+                    <td>bhabhi hain ha mara</td>
+                    <td>(not for seal) book by shafru</td>
+                    <td>shafru phone no</td>
+                    <td>out of range</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>shafru</td>
+                    <td>1</td>
+                    <td>12</td>
+                    <td>1hfh64gh</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>shafru</td>
+                    <td>1</td>
+                    <td>12</td>
+                    <td>1hfh64gh</td>
+                    <td>15</td>
+                </tr>
             </tbody>
         </table>
 
