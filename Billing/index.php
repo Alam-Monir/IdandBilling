@@ -23,9 +23,9 @@ include('../config/dbcon.php');
 <div class="card position-absolute start-0 bg-body-tertiary h-100 " style="width: 40%;">
 
     <div class="card d-flex align-items-center h-100">
-        <h4 class="pt-4">Make an Invoice</h4>
-        <div class="form-floating w-50">
-            <input type="text" id="customerName" class="form-control mt-3" placeholder="Customer Name" required>
+        <h4 class="pt-4">Make An Invoice</h4>
+        <div class="form-floating w-50 mt-5">
+            <input type="text" id="customerName" class="form-control mt-" placeholder="Customer Name" required>
             <label for="customerName">Customer Name</label>
         </div>
         <div class="form-floating w-50">
@@ -82,7 +82,7 @@ include('../config/dbcon.php');
 
 <!--tabel invoice-->
 
-<div id="invoice" class=" ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
+<div id="invoice" class="ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
     <div class="container text-center card h-100">
         <div class="row ">
             <?php
