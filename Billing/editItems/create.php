@@ -4,27 +4,33 @@ include('../../config/dbcon.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['action']) ? trim($_POST['action']) : '';
 
-    if ($action === 'deleteItem') {
-        $itemName = isset($_POST['itemName']) ? trim($_POST['itemName']) : '';
-
-        if (empty($itemName)) {
-            echo "Item name is required to delete.";
-            exit;
-        }
+    if ($action === 'searchItem') {
+        $searchTerm = isset($_POST['itemName']) ? trim($_POST['itemName']) : '';
 
         try {
-            $stmt = $pdo->prepare("DELETE FROM items WHERE itemName = :itemName");
-            $stmt->bindParam(':itemName', $itemName);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo "Item successfully deleted!";
+            if (!empty($searchTerm)) {
+                $stmt = $pdo->prepare("SELECT itemId, itemName, itemPrice 
+                               FROM items 
+                               WHERE itemName LIKE :searchTerm 
+                               ORDER BY itemName ASC");
+                $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
             } else {
-                echo "Item not found.";
+                $stmt = $pdo->prepare("SELECT itemId, itemName, itemPrice 
+                               FROM items 
+                               ORDER BY itemName ASC");
+            }
+            $stmt->execute();
+            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!empty($items)) {
+                echo json_encode(['status' => 'success', 'data' => $items]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'No items found.']);
             }
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
+        
     } elseif ($action === 'createItem') {
         $itemName = isset($_POST['itemName']) ? trim($_POST['itemName']) : '';
         $itemPrice = isset($_POST['itemPrice']) ? trim($_POST['itemPrice']) : '';

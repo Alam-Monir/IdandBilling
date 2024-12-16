@@ -47,12 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
         <button type="submit" id="createButton" class="btn btn-success m-lg-2">Create</button>
       </div>
     </form>
-    <form class="rounded-3" id="deleteForm" action="create.php" method="POST">
-      <label for="itemName" class="form-label" style="margin: 15px;">Delete Item</label>
+    <form class="rounded-3" id="searchForm" action="create.php" method="POST">
+      <label for="itemName" class="form-label" style="margin: 15px;">Search Item</label>
       <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Enter Item Name" required>
-      <input type="hidden" name="action" value="deleteItem">
+      <input type="hidden" name="action" value="searchItem">
       <div class="mt-3">
-        <button type="submit" class="btn btn-danger m-lg-2">Delete</button>
+        <button type="submit" class="btn btn-primary m-lg-2">Search</button>
       </div>
     </form>
   </div>
@@ -180,6 +180,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
     </table>
   </div>
 </div>
+
+<script>
+  document.getElementById('searchForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+
+    fetch('create.php', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const searchedItems = data.data;
+          const tableBody = document.querySelector('table tbody');
+
+          tableBody.innerHTML = '';
+
+          if (searchedItems.length > 0) {
+            let slNo = 1;
+            searchedItems.forEach(item => {
+              const row = `
+              <tr>
+                <th scope="row">${slNo++}</th>
+                <td>${item.itemName}</td>
+                <td>${item.itemPrice}</td>
+                <td>
+                  <a href="#"
+                    class="edit-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editItemModal"
+                    data-item-id="${item.itemId}"
+                    data-item-name="${item.itemName}"
+                    data-item-price="${item.itemPrice}">
+                    <i class="bi bi-pen px-2"></i>
+                  </a>
+                  <a href="#"
+                    class="delete-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteItemModal"
+                    data-item-id="${item.itemId}"
+                    data-item-name="${item.itemName}">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            `;
+              tableBody.insertAdjacentHTML('beforeend', row);
+            });
+            alert('Items Found!');
+          } else {
+            tableBody.innerHTML = `
+            <tr>
+              <td colspan="4" class="text-center">No items found.</td>
+            </tr>
+          `;
+          }
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        alert('Error: ' + error);
+      });
+  });
+</script>
 
 <script src="script.js"></script>
 
