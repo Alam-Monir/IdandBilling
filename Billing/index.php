@@ -17,6 +17,9 @@ include('../config/dbcon.php');
     }
 </style>
 
+
+<!--Make an Invoice-->
+
 <div class="card position-absolute start-0 bg-body-tertiary h-100 " style="width: 40%;">
 
     <div class="card d-flex align-items-center">
@@ -33,6 +36,12 @@ include('../config/dbcon.php');
             <input type="text" id="customerContact" class="form-control mt-3" placeholder="Customer Contact" pattern="\d{10}" title="Please enter 10 digits" required>
             <label for="customerContact">Customer Contact</label>
         </div>
+
+        <div class="form-floating w-50">
+            <input type="text" id="customerContact" class="form-control mt-3" placeholder="Customer Contact" pattern="\d{10}" title="Please enter 10 digits" required>
+            <label for="customerContact">Quantity</label>
+        </div>
+
 
         <div class="dropdown mb-3 w-50 mt-4">
             <input type="text" class="form-control" id="searchInput" placeholder="Search and select Items..." onfocus="showDropdown()" autocomplete="off">
@@ -71,8 +80,10 @@ include('../config/dbcon.php');
     </div>
 </div>
 
-<div id="invoice" class="w-60 p-5 ml-5 bg-body-tertiary position-absolute end-0">
-    <div class="container text-center card">
+<!--tabel invoice-->
+
+<div id="invoice" class="w-60 p-5 ml-5 bg-body-tertiary position-absolute end-0 h-100">
+    <div class="container text-center card h-100">
         <div class="row ">
             <?php
             $query = "SELECT sellerName, address, email, contact, gstNo FROM sellerInfo LIMIT 1";
@@ -129,7 +140,7 @@ include('../config/dbcon.php');
             <div class="fw-bold p-2 g-col-6 position-absolute top-0 end-0" id="totalAmount">₹ 455.00</div>
         </div>
 
-        <div class="card mb-5 pb-lg-5">
+        <div class="card mb-5 pb-lg-5 h-50">
             <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0" id="amountInWords">Amount in words : Seventy Crore Seventy Lakhs Seventy Seven Thousands Eight Hundreds and Seventy Seven Only</div>
         </div>
         <div class="footer text-center" style="margin-top: auto; padding: 10px 0;">
