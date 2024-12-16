@@ -82,8 +82,8 @@ include('../config/dbcon.php');
 
 <!--tabel invoice-->
 
-<div id="invoice" class="w-60 p-5 ml-5 bg-body-tertiary position-absolute end-0 h-100">
-    <div class="container text-center card h-100">
+<div id="invoice" class="p-5 ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
+    <div class="container text-center card h-100 card-text">
         <div class="row ">
             <?php
             $query = "SELECT sellerName, address, email, contact, gstNo FROM sellerInfo LIMIT 1";
@@ -111,7 +111,7 @@ include('../config/dbcon.php');
 
                 <div id="customerDetails" class="fw-normal mt-5 mb-10">
                     To: <span id="displayCustomerName">Land Debbarma</span> <br>
-                    Address: <span id="displayCustomerAddress">near don bosco agartala mark para</span><br>
+                    Address: <span id="displayCustomerAddress" class="card-text">near don bosco agartala mark para</span><br>
                     Contact: <span id="displayCustomerContact">123456789</span><br>
                 </div>
             </div>
