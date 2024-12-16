@@ -22,7 +22,7 @@ include('../config/dbcon.php');
 
 <div class="card position-absolute start-0 bg-body-tertiary h-100 " style="width: 40%;">
 
-    <div class="card d-flex align-items-center">
+    <div class="card d-flex align-items-center h-100">
         <h4 class="pt-4">Make an Invoice</h4>
         <div class="form-floating w-50">
             <input type="text" id="customerName" class="form-control mt-3" placeholder="Customer Name" required>
@@ -82,8 +82,8 @@ include('../config/dbcon.php');
 
 <!--tabel invoice-->
 
-<div id="invoice" class="p-5 ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
-    <div class="container text-center card h-100 card-text">
+<div id="invoice" class=" ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
+    <div class="container text-center card h-100">
         <div class="row ">
             <?php
             $query = "SELECT sellerName, address, email, contact, gstNo FROM sellerInfo LIMIT 1";
