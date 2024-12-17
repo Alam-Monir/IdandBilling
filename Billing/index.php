@@ -15,6 +15,50 @@ include('../config/dbcon.php');
         visibility: visible;
         opacity: 1;
     }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        width: 300px;
+    }
+
+    #quantityInput {
+        width: 100%;
+        padding: 5px;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    #suggestions {
+        z-index: 1000;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        background: #fff;
+    }
+
+    .list-group-item {
+        cursor: pointer;
+    }
+
+    .list-group-item:hover {
+        background: #f0f0f0;
+    }
 </style>
 
 
@@ -24,9 +68,14 @@ include('../config/dbcon.php');
 
     <div class="card d-flex align-items-center h-100">
         <h4 class="pt-4">Make An Invoice</h4>
-        <div class="form-floating w-50 mt-5">
-            <input type="text" id="customerName" class="form-control mt-" placeholder="Customer Name" required>
+        <div class="form-floating w-50 mt-4">
+            <input type="date" id="invoiceDate" class="form-control mt-3" placeholder="Invoice Date" required>
+            <label for="invoiceDate">Invoice Date</label>
+        </div>
+        <div class="form-floating w-50">
+            <input type="text" id="customerName" class="form-control mt-3" placeholder="Customer Name" required>
             <label for="customerName">Customer Name</label>
+            <ul id="suggestions" class="list-group position-absolute mt-1 w-50"></ul>
         </div>
         <div class="form-floating w-50">
             <input type="text" id="customerAddress" class="form-control mt-3" placeholder="Customer Address" required>
@@ -36,12 +85,6 @@ include('../config/dbcon.php');
             <input type="text" id="customerContact" class="form-control mt-3" placeholder="Customer Contact" pattern="\d{10}" title="Please enter 10 digits" required>
             <label for="customerContact">Customer Contact</label>
         </div>
-
-        <div class="form-floating w-50">
-            <input type="text" id="customerContact" class="form-control mt-3" placeholder="Customer Contact" pattern="\d{10}" title="Please enter 10 digits" required>
-            <label for="customerContact">Quantity</label>
-        </div>
-
 
         <div class="dropdown mb-3 w-50 mt-4">
             <input type="text" class="form-control" id="searchInput" placeholder="Search and select Items..." onfocus="showDropdown()" autocomplete="off">
@@ -68,8 +111,10 @@ include('../config/dbcon.php');
             <select class="form-select" id="inputGroupSelect02">
                 <option disabled selected> Select GST</option>
                 <option value="1">No GST</option>
-                <option value="2">18%</option>
-                <option value="3">33%</option>
+                <option value="2">5%</option>
+                <option value="3">12%</option>
+                <option value="4">18%</option>
+                <option value="5">33%</option>
             </select>
         </div>
 
@@ -80,7 +125,7 @@ include('../config/dbcon.php');
     </div>
 </div>
 
-<!--tabel invoice-->
+<!--table invoice-->
 
 <div id="invoice" class="ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
     <div class="container text-center card h-100">
@@ -140,7 +185,7 @@ include('../config/dbcon.php');
             <div class="fw-bold p-2 g-col-6 position-absolute top-0 end-0" id="totalAmount">₹ 455.00</div>
         </div>
 
-        <div class="card mb-5 pb-lg-5 h-50">
+        <div class="card mb-5 pb-lg-5 ">
             <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0" id="amountInWords">Amount in words : Seventy Crore Seventy Lakhs Seventy Seven Thousands Eight Hundreds and Seventy Seven Only</div>
         </div>
         <div class="footer text-center" style="margin-top: auto; padding: 10px 0;">
@@ -188,34 +233,29 @@ include('../config/dbcon.php');
 </script>
 
 <script>
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString();
-
-    document.getElementById('currentDate').textContent = formattedDate;
-</script>
-
-<script>
-    const sellerNameInput = document.getElementById('customerName');
-    const sellerContactInput = document.getElementById('customerContact');
-    const sellerAddressInput = document.getElementById('customerAddress');
-
-    const customerDetails = document.getElementById('customerDetails');
-
-    function updateCustomerDetails() {
-        const name = sellerNameInput.value || 'Land Debbarma';
-        const contact = sellerContactInput.value || '123456789';
-        const address = sellerAddressInput.value || 'near don bosco agartala mark para';
-
-        customerDetails.innerHTML = `
-        To: ${name} <br>
-        Address: ${address} <br>
-        Contact: ${contact} <br>
-    `;
+    function getFormattedTodayDate() {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        return `${day}/${month}/${year}`;
     }
 
-    sellerNameInput.addEventListener('input', updateCustomerDetails);
-    sellerContactInput.addEventListener('input', updateCustomerDetails);
-    sellerAddressInput.addEventListener('input', updateCustomerDetails);
+    const invoiceDateInput = document.getElementById('invoiceDate');
+    const currentDateSpan = document.getElementById('currentDate');
+
+    currentDateSpan.textContent = getFormattedTodayDate();
+
+    invoiceDateInput.addEventListener('input', () => {
+        const selectedDate = invoiceDateInput.value;
+        if (selectedDate) {
+            const [year, month, day] = selectedDate.split('-');
+            const formattedDate = `${day}/${month}/${year}`;
+            currentDateSpan.textContent = formattedDate;
+        } else {
+            currentDateSpan.textContent = getFormattedTodayDate();
+        }
+    });
 </script>
 
 <script>
@@ -287,7 +327,7 @@ include('../config/dbcon.php');
             if (gstHeader) gstHeader.style.display = '';
         }
 
-        const gstValue = selectedValue === "2" ? "18%" : selectedValue === "3" ? "33%" : "";
+        const gstValue = selectedValue === "2" ? "5%" : selectedValue === "3" ? "12%" : selectedValue === "4" ? "18%" : selectedValue === "5" ? "33%" : "";
 
         rows.forEach(row => {
             const gstColumn = row.querySelector('.gst-column');
@@ -316,6 +356,7 @@ include('../config/dbcon.php');
         const tbody = document.querySelector('#dataTable tbody');
         tbody.innerHTML = '';
         let slNo = 1;
+
         selectedItems.forEach(item => {
             const itemName = item.value;
             const itemPrice = item.getAttribute('data-price');
@@ -329,6 +370,7 @@ include('../config/dbcon.php');
                     <i class="bi bi-dash decrease-icon" style="cursor: pointer;"></i>
                     <span class="quantity-value">1</span>
                     <i class="bi bi-plus increase-icon" style="cursor: pointer;"></i>
+                    <i class="bi bi-pencil edit-icon py-1" style="cursor: pointer;"></i>
                 </div>
             </td>
             <td>${itemPrice}</td>
@@ -340,6 +382,7 @@ include('../config/dbcon.php');
 
             const decreaseIcon = row.querySelector('.decrease-icon');
             const increaseIcon = row.querySelector('.increase-icon');
+            const editIcon = row.querySelector('.edit-icon');
             const quantitySpan = row.querySelector('.quantity-value');
 
             increaseIcon.addEventListener('click', () => {
@@ -356,11 +399,52 @@ include('../config/dbcon.php');
                 }
             });
 
+            editIcon.addEventListener('click', () => {
+                openEditModal(quantitySpan);
+            });
+
             slNo++;
         });
 
         const selectedValue = gstSelect.value;
         updateGstInTable(selectedValue);
+    }
+
+    // Modal logic
+    function openEditModal(quantitySpan) {
+        let modal = document.getElementById('editModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'editModal';
+            modal.innerHTML = `
+            <div class="modal-overlay">
+                <div class="modal-content">
+                    <h5>Edit Quantity</h5>
+                    <input type="number" id="quantityInput" value="${quantitySpan.textContent}" min="1" />
+                    <button id="saveQuantityBtn" class="btn btn-outline-success">Save</button>
+                    <button id="closeModalBtn" class="btn btn-outline-secondary">Close</button>
+                </div>
+            </div>
+        `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('#closeModalBtn').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            modal.querySelector('#saveQuantityBtn').addEventListener('click', () => {
+                const newQuantity = parseInt(modal.querySelector('#quantityInput').value, 10);
+                if (newQuantity > 0) {
+                    quantitySpan.textContent = newQuantity;
+                    updateGrandTotalAndWords();
+                    modal.style.display = 'none';
+                } else {
+                    alert('Quantity must be at least 1.');
+                }
+            });
+        }
+
+        modal.style.display = 'block';
     }
 </script>
 
@@ -369,18 +453,12 @@ include('../config/dbcon.php');
     const exportButton = document.querySelector('#export');
 
     function generateUniqueInvoiceNumber() {
-        const timestamp = Date.now();
-        const randomPart = Math.floor(1000 + Math.random() * 9000);
-        return `${timestamp}${randomPart}`;
-    }
+        const timestamp = Date.now().toString(16);
+        const randomPart = Math.floor(Math.random() * 0xfffff).toString(16);
 
-    function updateCurrentDate() {
-        const currentDateElement = document.querySelector('#currentDate');
-        const now = new Date();
-        currentDateElement.textContent = now.toLocaleDateString();
+        const uniqueInvoiceNumber = (timestamp + randomPart).slice(0, 16).padStart(16, '0');
+        return uniqueInvoiceNumber;
     }
-
-    updateCurrentDate();
 
     exportButton.addEventListener('click', () => {
         const uniqueInvoiceNumber = generateUniqueInvoiceNumber();
@@ -406,6 +484,76 @@ include('../config/dbcon.php');
         });
     });
 </script>
+
+<script>
+    const input = document.getElementById('customerName');
+    const suggestionsBox = document.getElementById('suggestions');
+    const addressInput = document.getElementById('customerAddress');
+    const contactInput = document.getElementById('customerContact');
+    const customerDetails = document.getElementById('customerDetails');
+
+    function updateCustomerDetails() {
+        const name = input.value || 'Land Debbarma';
+        const contact = contactInput.value || '123456789';
+        const address = addressInput.value || 'near don bosco agartala mark para';
+
+        customerDetails.innerHTML = `
+        To: <span id="displayCustomerName">${name}</span> <br>
+        Address: <span id="displayCustomerAddress" class="card-text">${address}</span> <br>
+        Contact: <span id="displayCustomerContact">${contact}</span> <br>
+    `;
+    }
+
+    input.addEventListener('input', updateCustomerDetails);
+    addressInput.addEventListener('input', updateCustomerDetails);
+    contactInput.addEventListener('input', updateCustomerDetails);
+
+    input.addEventListener('input', async () => {
+        const query = input.value.trim();
+        if (query.length === 0) {
+            suggestionsBox.innerHTML = '';
+            return;
+        }
+
+        try {
+            const response = await fetch(`fetch_customer_names.php?query=${encodeURIComponent(query)}`);
+            const suggestions = await response.json();
+
+            suggestionsBox.innerHTML = '';
+
+            suggestions.forEach(({
+                customerName,
+                customerAddress,
+                customerContact
+            }) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = customerName;
+
+                li.addEventListener('click', () => {
+                    input.value = customerName;
+                    addressInput.value = customerAddress;
+                    contactInput.value = customerContact;
+
+                    updateCustomerDetails();
+
+                    suggestionsBox.innerHTML = '';
+                });
+
+                suggestionsBox.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error fetching suggestions:', error);
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!input.contains(event.target) && !suggestionsBox.contains(event.target)) {
+            suggestionsBox.innerHTML = '';
+        }
+    });
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <?php include('includes/footer.php') ?>

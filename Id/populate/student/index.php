@@ -81,8 +81,12 @@ $layoutName = htmlspecialchars($row['layoutName']);
         style="width: 400px; height: 660px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow-y: auto; background-color: #ffffff;">
         <input type="hidden" name="layoutId" value="<?= $id ?>">
         <div class="section mb-2">
+            <h6>Upload Excel File (if available):</h6>
+            <input type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls" alt="excelFile">
+        </div>
+        <div class="section mb-2">
             <h6>Upload Student Image:</h6>
-            <input type="file" id="profileImgInput" name="profileImg" accept="image/*" alt="profileImg">
+            <input type="file" id="profileImgInput" name="profileImg" accept="image/*" alt="profileImg" required>
         </div>
         <div class="form-floating mb-2">
             <input type="text" id="StudentNameInput" class="form-control" name="StudentName" placeholder="" required>
@@ -126,7 +130,50 @@ $layoutName = htmlspecialchars($row['layoutName']);
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const exportAllButton = document.getElementById('exportAllButton');
+        const excelFile = document.getElementById('excelFile');
+
+        exportAllButton.addEventListener('click', () => {
+            if (!excelFile.files.length) {
+                alert("Please upload an Excel file.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {
+                    type: 'array'
+                });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+                sheet.forEach((row, index) => {
+                    document.getElementById('StudentNameCard').textContent = row.StudentName || '';
+                    document.getElementById('StudentClassCard').textContent = row.Class || '';
+                    document.getElementById('dobCard').textContent = "Date of Birth: " + (row.DOB || '');
+                    document.getElementById('bGroupCard').textContent = "Blood Group: " + (row.BloodGroup || '');
+                    document.getElementById('fatherCard').textContent = "Father's Name: " + (row.Father || '');
+                    document.getElementById('addCard').textContent = "Address: " + (row.Address || '');
+                    document.getElementById('phNoCard').textContent = "Contact: " + (row.Contact || '');
+                    document.getElementById('validUpto').textContent = "Valid Upto: " + (row.ValidUpto || '');
+
+                    const cardLayout = document.getElementById('cardLayout');
+                    html2canvas(cardLayout).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = `Student_ID_${index + 1}.jpeg`;
+                        link.href = canvas.toDataURL("image/jpeg", 0.8);
+                        link.click();
+                    });
+                });
+            };
+            reader.readAsArrayBuffer(excelFile.files[0]);
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
         const inputMappings = {
             StudentName: {
