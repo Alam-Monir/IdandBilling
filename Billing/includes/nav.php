@@ -61,7 +61,7 @@
   <div class="nav1">
     <ul class="navbar">
       <li><a href="/idandbilling/" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
-      <li><a href="/idandbilling/billing" class="nav-link">INVOICE</a></li>
+      <li><a href="/idandbilling/billing" class="nav-link active">INVOICE</a></li>
       <li><a href="/idandbilling/billing/editItems/" class="nav-link">MANAGE ITEMS</a></li>
       <li><a href="/idandbilling/billing/editsellerinfo/" class="nav-link">SELLER INFO</a></li>
       <li><a href="/idandbilling/billing/customerdetails/" class="nav-link">CUSTOMER DETAILS</a></li>

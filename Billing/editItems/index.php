@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
             <div class="mb-3">
               <label for="itemName" class="form-label">Item Name</label>
               <input type="text" class="form-control" id="itemNameToEdit" name="itemName" readonly>
+              <!-- item name edit logic needs to be added -->
             </div>
             <div class="mb-3">
               <label for="itemPrice" class="form-label">Item Price</label>

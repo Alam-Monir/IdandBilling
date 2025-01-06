@@ -48,7 +48,6 @@ include('../config/dbcon.php');
         z-index: 1000;
         max-height: 200px;
         overflow-y: auto;
-        border: 1px solid #ccc;
         background: #fff;
     }
 
@@ -64,7 +63,7 @@ include('../config/dbcon.php');
 
 <!--Make an Invoice-->
 
-<div class="card position-absolute start-0 bg-body-tertiary h-100 " style="width: 40%;">
+<div class="card position-absolute start-0 bg-body-tertiary h-100 " style="width:35%;">
 
     <div class="card d-flex align-items-center h-100">
         <h4 class="pt-4">Make An Invoice</h4>
@@ -75,7 +74,7 @@ include('../config/dbcon.php');
         <div class="form-floating w-50">
             <input type="text" id="customerName" class="form-control mt-3" placeholder="Customer Name" required>
             <label for="customerName">Customer Name</label>
-            <ul id="suggestions" class="list-group position-absolute mt-1 w-50"></ul>
+            <ul id="suggestions" class="list-group position-absolute w-50"></ul>
         </div>
         <div class="form-floating w-50">
             <input type="text" id="customerAddress" class="form-control mt-3" placeholder="Customer Address" required>
@@ -127,7 +126,7 @@ include('../config/dbcon.php');
 
 <!--table invoice-->
 
-<div id="invoice" class="ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 60%;">
+<div id="invoice" class="ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 65%; margin-right:5px">
     <div class="container text-center card h-100">
         <div class="row ">
             <?php
@@ -185,8 +184,8 @@ include('../config/dbcon.php');
             <div class="fw-bold p-2 g-col-6 position-absolute top-0 end-0" id="totalAmount">₹ 455.00</div>
         </div>
 
-        <div class="card mb-5 pb-lg-5 ">
-            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0" id="amountInWords">Amount in words : Seventy Crore Seventy Lakhs Seventy Seven Thousands Eight Hundreds and Seventy Seven Only</div>
+        <div class="card">
+            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0 " id="amountInWords">Amount in words : Seventy Crore Seventy Lakhs Seventy Seven Thousands Eight Hundreds and Seventy Seven Only</div>
         </div>
         <div class="footer text-center" style="margin-top: auto; padding: 10px 0;">
             <hr style="margin: 0;">
