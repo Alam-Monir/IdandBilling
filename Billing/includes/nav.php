@@ -32,7 +32,7 @@
     display: flex;
     font-weight: 600;
     justify-content: space-between;
-    gap: 30px;
+    gap: 15px;
     font-weight: bold;
     color: black;
     list-style-type: none;
@@ -65,6 +65,7 @@
       <li><a href="/idandbilling/billing/editItems/" class="nav-link">MANAGE ITEMS</a></li>
       <li><a href="/idandbilling/billing/editsellerinfo/" class="nav-link">SELLER INFO</a></li>
       <li><a href="/idandbilling/billing/customerdetails/" class="nav-link">CUSTOMER DETAILS</a></li>
+      <li><a href="/idandbilling/billing/allInvoices/" class="nav-link">ALL INVOICES</a></li>
     </ul>
   </div>
 </section>
