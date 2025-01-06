@@ -1,8 +1,6 @@
 <?php
 include("../../includes/header.php");
 include("../../includes/nav.php");
-?>
-<?php
 include('../../../config/dbcon.php');
 
 function prepareImageUrl($imageUrl)
@@ -131,50 +129,76 @@ $layoutName = htmlspecialchars($row['layoutName']);
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const exportAllButton = document.getElementById('exportAllButton');
+        // Export Button Logic
+        const exportButton = document.getElementById('exportButton');
         const excelFile = document.getElementById('excelFile');
+        const profileImgCard = document.getElementById('profileImgCard');
+        const defaultImgPath = '../../img/';
 
-        exportAllButton.addEventListener('click', () => {
-            if (!excelFile.files.length) {
-                alert("Please upload an Excel file.");
-                return;
-            }
+        if (exportButton) {
+            exportButton.addEventListener('click', () => {
+                if (!excelFile.files.length) {
+                    alert("Please upload an Excel file.");
+                    return;
+                }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {
-                    type: 'array'
-                });
-                const sheetName = workbook.SheetNames[0];
-                const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+                const reader = new FileReader();
+                reader.onload = function(e) {sheet.forEach((row, index) => {
+                        // Populate card fields from Excel data
+                        document.getElementById('StudentNameCard').textContent = row.StudentName || '';
+                        document.getElementById('StudentClassCard').textContent = row.Class || '';
+                        document.getElementById('dobCard').textContent = "Date of Birth: " + (row.DOB || '');
+                        document.getElementById('bGroupCard').textContent = "Blood Group: " + (row.BloodGroup || '');
+                        document.getElementById('fatherCard').textContent = "Father's Name: " + (row.Father || '');
+                        document.getElementById('addCard').textContent = "Address: " + (row.Address || '');
+                        document.getElementById('phNoCard').textContent = "Contact: " + (row.Contact || '');
+                        document.getElementById('validUpto').textContent = "Valid Upto: " + (row.ValidUpto || '');
 
-                sheet.forEach((row, index) => {
-                    document.getElementById('StudentNameCard').textContent = row.StudentName || '';
-                    document.getElementById('StudentClassCard').textContent = row.Class || '';
-                    document.getElementById('dobCard').textContent = "Date of Birth: " + (row.DOB || '');
-                    document.getElementById('bGroupCard').textContent = "Blood Group: " + (row.BloodGroup || '');
-                    document.getElementById('fatherCard').textContent = "Father's Name: " + (row.Father || '');
-                    document.getElementById('addCard').textContent = "Address: " + (row.Address || '');
-                    document.getElementById('phNoCard').textContent = "Contact: " + (row.Contact || '');
-                    document.getElementById('validUpto').textContent = "Valid Upto: " + (row.ValidUpto || '');
+                        // Set profile image from ImageName column  
+                        const imageName = row.ImageName || '';
+                        profileImgCard.src = imageName ? `${defaultImgPath}${imageName}` : '';
 
-                    const cardLayout = document.getElementById('cardLayout');
-                    html2canvas(cardLayout).then(canvas => {
-                        const link = document.createElement('a');
-                        link.download = `Student_ID_${index + 1}.jpeg`;
-                        link.href = canvas.toDataURL("image/jpeg", 0.8);
-                        link.click();
+                        // Generate and download card image
+                        const cardLayout = document.getElementById('cardLayout');
+                        html2canvas(cardLayout).then(canvas => {
+                            const link = document.createElement('a');
+                            link.download = `Student_ID_${index + 1}.jpeg`;
+                            link.href = canvas.toDataURL("image/jpeg", 0.8);
+                            link.click();
+                        });
                     });
-                });
-            };
-            reader.readAsArrayBuffer(excelFile.files[0]);
-        });
-    });
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {
+                        type: 'array'
+                    });
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    document.addEventListener('DOMContentLoaded', () => {
+                    
+                };
+                reader.readAsArrayBuffer(excelFile.files[0]);
+            });
+        }
+
+        // Real-time Profile Image Upload
+        const profileImgInput = document.getElementById('profileImgInput');
+        if (profileImgInput) {
+            profileImgInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        profileImgCard.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Real-time Input to Card Mapping
         const inputMappings = {
             StudentName: {
                 input: document.getElementById('StudentNameInput'),
@@ -223,74 +247,51 @@ $layoutName = htmlspecialchars($row['layoutName']);
                 input: document.getElementById('validity'),
                 cardElement: document.getElementById('validUpto'),
                 label: 'Valid Upto: ',
-                format: (value) => {
-                    const date = new Date(value);
-                    if (!isNaN(date)) {
-                        const day = String(date.getDate()).padStart(2, '0');
-                        const month = String(date.getMonth() + 1).padStart(2, '0');
-                        const year = date.getFullYear();
-                        return `${day}-${month}-${year}`;
-                    }
-                    return value;
-                },
+                // format: (value) => {
+                //     const date = new Date(value);
+                //     if (!isNaN(date)) {
+                //         const day = String(date.getDate()).padStart(2, '0');
+                //         const month = String(date.getMonth() + 1).padStart(2, '0');
+                //         const year = date.getFullYear();
+                //         return `${day}-${month}-${year}`;
+                //     }
+                //     return value;
+                // },
             },
         };
 
+        // Update card fields dynamically
         Object.values(inputMappings).forEach(({
             input,
             cardElement,
-            label = '',
+            label,
             format
         }) => {
-            input.addEventListener('input', () => {
-                const value = input.value.trim();
-                cardElement.textContent = label + (format ? format(value) : value);
-            });
-        });
-
-        const profileImgInput = document.getElementById('profileImgInput');
-        const profileImgCard = document.getElementById('profileImgCard');
-
-        profileImgInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    profileImgCard.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+            if (input) {
+                input.addEventListener('input', () => {
+                    const value = input.value;
+                    cardElement.textContent = (label || '') + (format ? format(value) : value);
+                });
             }
         });
 
+        // Cancel Button Logic
         const cancelButton = document.getElementById('cancelButton');
-        cancelButton.addEventListener('click', () => {
-            if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
-                window.location.href = '../../';
-            }
-        });
-    });
+        if (cancelButton) {
+            cancelButton.addEventListener('click', () => {
+                Object.values(inputMappings).forEach(({
+                    input,
+                    cardElement,
+                    label
+                }) => {
+                    if (input) input.value = '';
+                    if (cardElement) cardElement.textContent = label || '';
+                });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const exportButton = document.getElementById('exportButton');
-
-        exportButton.addEventListener('click', function() {
-            const cardLayout = document.getElementById('cardLayout');
-
-            if (typeof html2canvas !== 'function') {
-                console.error('html2canvas is not loaded properly.');
-                return;
-            }
-
-            html2canvas(cardLayout).then((canvas) => {
-                const imageUrl = canvas.toDataURL('image/jpeg');
-                const link = document.createElement('a');
-                link.href = imageUrl;
-                link.download = 'id-card.jpeg';
-                link.click();
-            }).catch((error) => {
-                console.error('Error while exporting the card:', error);
+                // Reset profile image
+                profileImgCard.src = '';
             });
-        });
+        }
     });
 </script>
 
