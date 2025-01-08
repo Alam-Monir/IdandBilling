@@ -12,7 +12,7 @@
   .nav1 {
     margin-top: 5px;
     background: #fff;
-    padding: 30px 200px;
+    padding: 30px 100px;
     border: solid black 3px;
     justify-content: space-between;
   }
@@ -31,8 +31,8 @@
   .navbar {
     display: flex;
     font-weight: 600;
-    justify-content: space-between;
-    gap: 15px;
+    justify-content: space-evenly;
+    gap: 10px;
     font-weight: bold;
     color: black;
     list-style-type: none;
