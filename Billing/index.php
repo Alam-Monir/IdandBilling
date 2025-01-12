@@ -85,7 +85,12 @@ include('../config/dbcon.php');
             <label for="customerContact">Customer Contact</label>
         </div>
 
-        <div class="dropdown mb-3 w-50 mt-4">
+        <div class="form-floating w-50">
+            <input type="text" id="Items" class="form-control mt-3" placeholder="Items" title="Please enter the items" required>
+            <label for="Items">Items</label>
+        </div>
+
+        <!-- <div class="dropdown mb-3 w-50 mt-3">
             <input type="text" class="form-control" id="searchInput" placeholder="Search and select Items..." onfocus="showDropdown()" autocomplete="off">
             <div class="dropdown-menu p-2" id="dropdownMenu" style="width: 100%; max-height: 200px; overflow-y: auto; display: none;">
                 <ul class="list-unstyled mb-0" id="dropdownOptions">
@@ -104,10 +109,10 @@ include('../config/dbcon.php');
                     ?>
                 </ul>
             </div>
-        </div>
+        </div> -->
 
-        <div class="input-group mb-3 w-50 mt-3">
-            <select class="form-select" id="inputGroupSelect02">
+        <div class="input-group mb-2 w-50 mt-3">
+            <select class="form-select" id="gstSelector">
                 <option disabled selected> Select GST</option>
                 <option value="1">No GST</option>
                 <option value="2">5%</option>
@@ -115,6 +120,11 @@ include('../config/dbcon.php');
                 <option value="4">18%</option>
                 <option value="5">33%</option>
             </select>
+        </div>
+
+        <div class="form-floating w-50">
+            <input type="date" id="deliveryDate" class="form-control mt-3" placeholder="Delivery Date" required>
+            <label for="deliveryDate">Delivery Date</label>
         </div>
 
         <div class="d-grid gap-3 d-md-block mt-3 mb-4">
@@ -169,8 +179,10 @@ include('../config/dbcon.php');
                     <th scope="col">SL.no</th>
                     <th scope="col">Item Name</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Rate</th>
                     <th scope="col" class="gst-column-head">GST</th>
+                    <th scope="col" class="gstAmount-column-head">GST Amount</th>
                     <th scope="col">Amount</th>
                 </tr>
             </thead>
@@ -181,11 +193,11 @@ include('../config/dbcon.php');
 
         <div class="card mb-5">
             <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0">Total Amount :</div>
-            <div class="fw-bold p-2 g-col-6 position-absolute top-0 end-0" id="totalAmount">₹ 455.00</div>
+            <div class="fw-bold p-2 g-col-6 position-absolute top-0 end-0" id="totalAmount">₹ 00</div>
         </div>
 
         <div class="card">
-            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0 " id="amountInWords">Amount in words : Seventy Crore Seventy Lakhs Seventy Seven Thousands Eight Hundreds and Seventy Seven Only</div>
+            <div class="fw-bold p-2 g-col-6 position-absolute top-0 start-0 " id="amountInWords">Amount in words : </div>
         </div>
         <div class="footer text-center" style="margin-top: auto; padding: 10px 0;">
             <hr style="margin: 0;">
@@ -194,43 +206,315 @@ include('../config/dbcon.php');
     </div>
 </div>
 
+<!-- Main script -->
 <script>
-    const searchInput = document.getElementById('searchInput');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const dropdownOptions = document.getElementById('dropdownOptions');
+    const gstSelector = document.getElementById('gstSelector');
+    const gstColumnHead = document.querySelector('.gst-column-head');
+    const gstAmountColumnHead = document.querySelector('.gstAmount-column-head');
+    const sellerGstInfo = document.getElementById('sellerGstInfo');
 
-    function showDropdown() {
-        dropdownMenu.style.display = 'block';
+    const itemsInput = document.getElementById('Items');
+    const dataTableBody = document.querySelector('#dataTable tbody');
+
+    // Handle GST selection and update table
+    gstSelector.addEventListener('change', () => {
+        const selectedGST = gstSelector.value;
+
+        if (selectedGST === "1" || selectedGST === "") {
+            // Hide GST and GST Amount columns
+            document.querySelectorAll('.gst-column').forEach(gstCell => gstCell.style.display = 'none');
+            document.querySelectorAll('.gstAmount-column').forEach(gstAmountCell => gstAmountCell.style.display = 'none');
+            gstColumnHead.style.display = 'none';
+            gstAmountColumnHead.style.display = 'none';
+            sellerGstInfo.style.display = 'none';
+        } else {
+            // Show GST and GST Amount columns
+            document.querySelectorAll('.gst-column').forEach(gstCell => gstCell.style.display = 'table-cell');
+            document.querySelectorAll('.gstAmount-column').forEach(gstAmountCell => gstAmountCell.style.display = 'table-cell');
+            gstColumnHead.style.display = 'table-cell';
+            gstAmountColumnHead.style.display = 'table-cell';
+            sellerGstInfo.style.display = 'inline';
+        }
+
+        // Update GST values in the table for existing rows
+        updateGstAmount(selectedGST);
+        updateTotalAmount();
+    });
+
+    // Function to calculate and update GST Amount and Total Amount in the table
+    function updateGstAmount(selectedGST) {
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+
+        rows.forEach(row => {
+            const rate = parseFloat(row.querySelector('.price-value').textContent);
+            const quantity = parseInt(row.querySelector('.quantity-value').textContent, 10);
+            const gstAmountCell = row.querySelector('.gstAmount-column');
+            const gstCell = row.querySelector('.gst-column');
+            const amountCell = row.querySelector('.amount-column');
+
+            if (rate > 0 && quantity > 0) {
+                const totalAmount = rate * quantity;
+                let gstAmount = 0;
+
+                // Apply selected GST
+                if (selectedGST === "2") {
+                    gstAmount = totalAmount * 0.05;
+                    gstCell.textContent = "5%";
+                } else if (selectedGST === "3") {
+                    gstAmount = totalAmount * 0.12;
+                    gstCell.textContent = "12%";
+                } else if (selectedGST === "4") {
+                    gstAmount = totalAmount * 0.18;
+                    gstCell.textContent = "18%";
+                } else if (selectedGST === "5") {
+                    gstAmount = totalAmount * 0.33;
+                    gstCell.textContent = "33%";
+                } else {
+                    gstAmount = 0;
+                    gstCell.textContent = "";
+                }
+
+                // Update cells
+                gstAmountCell.textContent = gstAmount.toFixed(2);
+                amountCell.textContent = (totalAmount + gstAmount).toFixed(2);
+            } else {
+                gstCell.textContent = "";
+                gstAmountCell.textContent = "";
+                amountCell.textContent = "";
+            }
+        });
     }
 
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.dropdown')) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
+    // Populating Table with Items
+    itemsInput.addEventListener('input', () => {
+        const items = itemsInput.value.split(',').map(item => item.trim()).filter(item => item);
 
-    searchInput.addEventListener('input', function() {
-        const filter = this.value.toLowerCase();
-        const options = dropdownOptions.querySelectorAll('li');
+        dataTableBody.innerHTML = '';
 
-        options.forEach(option => {
-            const text = option.textContent.trim().toLowerCase();
-            option.style.display = text.includes(filter) ? '' : 'none';
+        items.forEach((item, index) => {
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item}</td>
+            <td>
+                <div class="quantity">
+                    <i class="bi bi-dash decrease-icon" style="cursor: pointer;"></i>
+                    <span class="quantity-value">1</span>
+                    <i class="bi bi-plus increase-icon" style="cursor: pointer;"></i>
+                    <i class="bi bi-pencil edit-quantity-icon py-1" style="cursor: pointer;"></i>
+                </div>
+            </td>
+            <td>
+                <div class="quantity">
+                    <span class="edit-per">Pcs</span>
+                    <i class="bi bi-pencil edit-per-icon py-2" style="cursor: pointer;"></i>
+                </div>
+            </td>
+            <td>
+                <div class="quantity">
+                    <span class="price-value">100</span>
+                    <i class="bi bi-pencil edit-price-icon py-1" style="cursor: pointer;"></i>
+                </div>
+            </td>
+            <td class="gst-column"></td>
+            <td class="gstAmount-column"></td>
+            <td class="amount-column"></td>
+        `;
+
+            // Add event listeners
+            const decreaseIcon = newRow.querySelector('.decrease-icon');
+            const increaseIcon = newRow.querySelector('.increase-icon');
+            const quantityValue = newRow.querySelector('.quantity-value');
+            const editQuantityIcon = newRow.querySelector('.edit-quantity-icon');
+            const priceValue = newRow.querySelector('.price-value');
+            const editPriceIcon = newRow.querySelector('.edit-price-icon');
+            const perValue = newRow.querySelector('.edit-per');
+            const editPerIcon = newRow.querySelector('.edit-per-icon');
+
+            decreaseIcon.addEventListener('click', () => {
+                let quantity = parseInt(quantityValue.textContent, 10);
+                if (quantity > 1) {
+                    quantity -= 1;
+                    quantityValue.textContent = quantity;
+                    const selectedGST = gstSelector.value;
+                    updateGstAmount(selectedGST);
+                    updateTotalAmount();
+                }
+            });
+
+            increaseIcon.addEventListener('click', () => {
+                let quantity = parseInt(quantityValue.textContent, 10);
+                quantity += 1;
+                quantityValue.textContent = quantity;
+                const selectedGST = gstSelector.value;
+                updateGstAmount(selectedGST);
+                updateTotalAmount();
+            });
+
+            editQuantityIcon.addEventListener('click', () => {
+                openEditModal(quantityValue, 'Quantity', (newQuantity) => {
+                    quantityValue.textContent = newQuantity;
+                    const selectedGST = gstSelector.value;
+                    updateGstAmount(selectedGST);
+                    updateTotalAmount();
+                });
+            });
+
+            editPriceIcon.addEventListener('click', () => {
+                openEditModal(priceValue, 'Price', (newPrice) => {
+                    priceValue.textContent = newPrice;
+                    const selectedGST = gstSelector.value;
+                    updateGstAmount(selectedGST);
+                    updateTotalAmount();
+                });
+            });
+
+            editPerIcon.addEventListener('click', () => {
+                openEditModal(perValue, 'Unit (e.g., Pcs)');
+            });
+
+            dataTableBody.appendChild(newRow);
         });
+
+        const selectedGST = gstSelector.value;
+        updateGstAmount(selectedGST);
+        updateTotalAmount();
     });
 
-    dropdownOptions.addEventListener('change', function() {
-        const selected = Array.from(dropdownOptions.querySelectorAll('input:checked'))
-            .map(checkbox => checkbox.value)
-            .join(', ');
-        searchInput.value = selected;
-    });
+    // Function to update the total amount and display the amount in words
+    function updateTotalAmount() {
+        let totalAmount = 0;
 
-    dropdownMenu.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
+        // Loop through each row in the table and sum the Amount column
+        const rows = document.querySelectorAll('#dataTable tbody tr');
+        rows.forEach(row => {
+            const amountCell = row.querySelector('.amount-column');
+            if (amountCell) {
+                totalAmount += parseFloat(amountCell.textContent) || 0;
+            }
+        });
+
+        // Update the Total Amount display
+        const totalAmountElement = document.getElementById('totalAmount');
+        totalAmountElement.textContent = `₹ ${totalAmount.toFixed(2)}`;
+
+        // Update the Amount in Words display
+        const amountInWordsElement = document.getElementById('amountInWords');
+        amountInWordsElement.textContent = `Amount in words: ${numberToWords(totalAmount)}`;
+    }
+
+
+    // Function to convert a number into words
+    function numberToWords(num) {
+        const ones = [
+            "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+            "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+            "Eighteen", "Nineteen"
+        ];
+        const tens = [
+            "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+        ];
+        const thousands = ["", "Thousand", "Lakh", "Crore"];
+
+        if (num === 0) return "Zero";
+
+        let word = "";
+        let i = 0;
+
+        // Loop through the number in chunks of 1000 (for thousands, lakhs, etc.)
+        while (num > 0) {
+            if (num % 1000 !== 0) {
+                word = convertHundreds(num % 1000) + thousands[i] + " " + word;
+            }
+            num = Math.floor(num / 1000);
+            i++;
+        }
+
+        return word.trim();
+    }
+
+    // Function to convert a number less than 1000 to words
+    function convertHundreds(num) {
+        const ones = [
+            "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+            "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+            "Eighteen", "Nineteen"
+        ];
+        const tens = [
+            "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
+        ];
+
+        let word = "";
+
+        if (num >= 100) {
+            word += ones[Math.floor(num / 100)] + " Hundred ";
+            num = num % 100;
+        }
+
+        if (num >= 20) {
+            word += tens[Math.floor(num / 10)] + " ";
+            num = num % 10;
+        }
+
+        if (num > 0) {
+            word += ones[num] + " ";
+        }
+
+        return word.trim() + " only";
+    }
 </script>
 
+<!-- edit modal function pencil button -->
+<script>
+    function openEditModal(targetSpan, title, callback) {
+        let modal = document.getElementById('editModal');
+        if (!modal) {
+            // Create modal if it doesn't exist
+            modal = document.createElement('div');
+            modal.id = 'editModal';
+            modal.innerHTML = `
+            <div class="modal-overlay">
+                <div class="modal-content">
+                    <h5 id="modalTitle"></h5>
+                    <input type="text" id="editInput" value="" />
+                    <button id="saveEditBtn" class="btn btn-outline-success">Save</button>
+                    <button id="closeModalBtn" class="btn btn-outline-secondary">Close</button>
+                </div>
+            </div>
+        `;
+            document.body.appendChild(modal);
+
+            // Close button functionality
+            modal.querySelector('#closeModalBtn').addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Dynamically update the modal title and input field
+        modal.querySelector('#modalTitle').textContent = `Edit ${title}`;
+        modal.querySelector('#editInput').value = targetSpan.textContent;
+
+        // Update the save button functionality for the current target
+        const saveButton = modal.querySelector('#saveEditBtn');
+        saveButton.onclick = () => {
+            const newValue = modal.querySelector('#editInput').value.trim();
+            if (newValue) {
+                targetSpan.textContent = newValue;
+                modal.style.display = 'none';
+
+                if (callback) callback(newValue);
+            } else {
+                alert(`${title} cannot be empty.`);
+            }
+        };
+
+        modal.style.display = 'block';
+    }
+</script>
+
+
+<!-- Date function -->
 <script>
     function getFormattedTodayDate() {
         const today = new Date();
@@ -257,196 +541,7 @@ include('../config/dbcon.php');
     });
 </script>
 
-<script>
-    function numberToWords(number) {
-        const ones = [
-            "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"
-        ];
-        const tens = [
-            "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
-        ];
-        const teens = [
-            "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
-            "Sixteen", "Seventeen", "Eighteen", "Nineteen"
-        ];
-
-        function convertToWords(num) {
-            if (num === 0) return "";
-            if (num < 10) return ones[num];
-            if (num < 20) return teens[num - 10];
-            if (num < 100) return `${tens[Math.floor(num / 10)]} ${ones[num % 10]}`.trim();
-            if (num < 1000) return `${ones[Math.floor(num / 100)]} Hundred ${convertToWords(num % 100)}`.trim();
-            if (num < 100000) return `${convertToWords(Math.floor(num / 1000))} Thousand ${convertToWords(num % 1000)}`.trim();
-            if (num < 10000000) return `${convertToWords(Math.floor(num / 100000))} Lakh ${convertToWords(num % 100000)}`.trim();
-            return `${convertToWords(Math.floor(num / 10000000))} Crore ${convertToWords(num % 10000000)}`.trim();
-        }
-
-        const words = convertToWords(number);
-        return words.trim() + (number % 1 === 0 ? " Only" : "");
-    }
-
-    function updateGrandTotalAndWords() {
-        const rows = document.querySelectorAll('#dataTable tbody tr');
-        let grandTotal = 0;
-
-        rows.forEach(row => {
-            const quantity = parseInt(row.querySelector('.quantity-value').textContent, 10);
-            const price = parseFloat(row.querySelector('td:nth-child(4)').textContent) || 0;
-            const gstValue = row.querySelector('.gst-column').textContent;
-            let gst = 0;
-
-            if (gstValue.includes('%')) {
-                gst = (parseFloat(gstValue) / 100) * (price * quantity);
-            }
-
-            const amount = (price * quantity) + gst;
-            row.querySelector('.total').textContent = amount.toFixed(2);
-            grandTotal += amount;
-        });
-
-        const totalAmountDisplay = document.getElementById('totalAmount');
-        totalAmountDisplay.textContent = `₹ ${grandTotal.toFixed(2)}`;
-
-        const amountInWordsDisplay = document.getElementById('amountInWords');
-        const amountInWords = numberToWords(Math.round(grandTotal));
-        amountInWordsDisplay.textContent = `Amount in words : ${amountInWords}`;
-    }
-
-
-    function updateGstInTable(selectedValue) {
-        const rows = document.querySelectorAll('#dataTable tbody tr');
-        const gstColumns = document.querySelectorAll('.gst-column');
-        const gstHeader = document.querySelector('th.gst-column-head');
-
-        if (selectedValue === "1") {
-            gstColumns.forEach(col => col.style.display = 'none');
-            if (gstHeader) gstHeader.style.display = 'none';
-        } else {
-            gstColumns.forEach(col => col.style.display = '');
-            if (gstHeader) gstHeader.style.display = '';
-        }
-
-        const gstValue = selectedValue === "2" ? "5%" : selectedValue === "3" ? "12%" : selectedValue === "4" ? "18%" : selectedValue === "5" ? "33%" : "";
-
-        rows.forEach(row => {
-            const gstColumn = row.querySelector('.gst-column');
-            if (gstColumn) {
-                gstColumn.textContent = gstValue || '';
-            }
-        });
-
-        updateGrandTotalAndWords();
-    }
-
-    const gstSelect = document.getElementById('inputGroupSelect02');
-    gstSelect.addEventListener('change', function() {
-        const selectedValue = this.value;
-        updateGstInTable(selectedValue);
-    });
-
-    document.getElementById('dropdownOptions').addEventListener('change', function(e) {
-        if (e.target.type === 'checkbox') {
-            updateTable();
-        }
-    });
-
-    function updateTable() {
-        const selectedItems = document.querySelectorAll('#dropdownOptions input[type="checkbox"]:checked');
-        const tbody = document.querySelector('#dataTable tbody');
-        tbody.innerHTML = '';
-        let slNo = 1;
-
-        selectedItems.forEach(item => {
-            const itemName = item.value;
-            const itemPrice = item.getAttribute('data-price');
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-            <th scope="row">${slNo}</th>
-            <td>${itemName}</td>
-            <td>
-                <div class="quantity">
-                    <i class="bi bi-dash decrease-icon" style="cursor: pointer;"></i>
-                    <span class="quantity-value">1</span>
-                    <i class="bi bi-plus increase-icon" style="cursor: pointer;"></i>
-                    <i class="bi bi-pencil edit-icon py-1" style="cursor: pointer;"></i>
-                </div>
-            </td>
-            <td>${itemPrice}</td>
-            <td class="gst-column">GST Placeholder</td>
-            <td class="total">${itemPrice}</td>
-        `;
-
-            tbody.appendChild(row);
-
-            const decreaseIcon = row.querySelector('.decrease-icon');
-            const increaseIcon = row.querySelector('.increase-icon');
-            const editIcon = row.querySelector('.edit-icon');
-            const quantitySpan = row.querySelector('.quantity-value');
-
-            increaseIcon.addEventListener('click', () => {
-                const currentQuantity = parseInt(quantitySpan.textContent, 10);
-                quantitySpan.textContent = currentQuantity + 1;
-                updateGrandTotalAndWords();
-            });
-
-            decreaseIcon.addEventListener('click', () => {
-                const currentQuantity = parseInt(quantitySpan.textContent, 10);
-                if (currentQuantity > 1) {
-                    quantitySpan.textContent = currentQuantity - 1;
-                    updateGrandTotalAndWords();
-                }
-            });
-
-            editIcon.addEventListener('click', () => {
-                openEditModal(quantitySpan);
-            });
-
-            slNo++;
-        });
-
-        const selectedValue = gstSelect.value;
-        updateGstInTable(selectedValue);
-    }
-
-    // Modal logic
-    function openEditModal(quantitySpan) {
-        let modal = document.getElementById('editModal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'editModal';
-            modal.innerHTML = `
-            <div class="modal-overlay">
-                <div class="modal-content">
-                    <h5>Edit Quantity</h5>
-                    <input type="number" id="quantityInput" value="${quantitySpan.textContent}" min="1" />
-                    <button id="saveQuantityBtn" class="btn btn-outline-success">Save</button>
-                    <button id="closeModalBtn" class="btn btn-outline-secondary">Close</button>
-                </div>
-            </div>
-        `;
-            document.body.appendChild(modal);
-
-            modal.querySelector('#closeModalBtn').addEventListener('click', () => {
-                modal.style.display = 'none';
-            });
-
-            modal.querySelector('#saveQuantityBtn').addEventListener('click', () => {
-                const newQuantity = parseInt(modal.querySelector('#quantityInput').value, 10);
-                if (newQuantity > 0) {
-                    quantitySpan.textContent = newQuantity;
-                    updateGrandTotalAndWords();
-                    modal.style.display = 'none';
-                } else {
-                    alert('Quantity must be at least 1.');
-                }
-            });
-        }
-
-        modal.style.display = 'block';
-    }
-</script>
-
+<!-- Invoice export function -->
 <script>
     const invoiceCard = document.querySelector('#invoice');
     const exportButton = document.querySelector('#export');
@@ -484,6 +579,7 @@ include('../config/dbcon.php');
     });
 </script>
 
+<!-- Customer Input suggestion function -->
 <script>
     const input = document.getElementById('customerName');
     const suggestionsBox = document.getElementById('suggestions');
@@ -552,6 +648,7 @@ include('../config/dbcon.php');
         }
     });
 </script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
