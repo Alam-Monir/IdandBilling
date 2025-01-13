@@ -90,27 +90,6 @@ include('../config/dbcon.php');
             <label for="Items">Items</label>
         </div>
 
-        <!-- <div class="dropdown mb-3 w-50 mt-3">
-            <input type="text" class="form-control" id="searchInput" placeholder="Search and select Items..." onfocus="showDropdown()" autocomplete="off">
-            <div class="dropdown-menu p-2" id="dropdownMenu" style="width: 100%; max-height: 200px; overflow-y: auto; display: none;">
-                <ul class="list-unstyled mb-0" id="dropdownOptions">
-                    <?php
-                    $query = $pdo->query("SELECT itemName, itemPrice FROM items");
-
-                    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                        $itemName = htmlspecialchars($row['itemName']);
-                        $itemPrice = htmlspecialchars($row['itemPrice']);
-                        echo "<li>
-                                <label>
-                                    <input type='checkbox' value='$itemName' data-price='$itemPrice'> $itemName - $itemPrice
-                                </label>
-                            </li>";
-                    }
-                    ?>
-                </ul>
-            </div>
-        </div> -->
-
         <div class="input-group mb-2 w-50 mt-3">
             <select class="form-select" id="gstSelector">
                 <option disabled selected> Select GST</option>
@@ -206,7 +185,7 @@ include('../config/dbcon.php');
     </div>
 </div>
 
-<!-- Main script -->
+<!-- Main invoice creation script -->
 <script>
     const gstSelector = document.getElementById('gstSelector');
     const gstColumnHead = document.querySelector('.gst-column-head');
