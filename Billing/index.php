@@ -492,7 +492,6 @@ include('../config/dbcon.php');
     }
 </script>
 
-
 <!-- Date function -->
 <script>
     function getFormattedTodayDate() {
@@ -628,6 +627,95 @@ include('../config/dbcon.php');
     });
 </script>
 
+<!-- Saving Invoice -->
+<script>
+    document.getElementById("export").addEventListener("click", async () => {
+        // Collect form data
+        const invoiceDateInput = document.getElementById("invoiceDate").value;
+        const deliveryDateInput = document.getElementById("deliveryDate").value;
+        const customerName = document.getElementById("customerName").value;
+        const customerAddress = document.getElementById("customerAddress").value;
+        const customerContact = document.getElementById("customerContact").value;
+        const gstPercentage = document.getElementById("gstSelector").value;
+
+        //If today's date field is empty enter current date
+        function getFormattedTodayDatedb() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            return `${year}/${month}/${day}`;
+        }
+        const formattedToday = getFormattedTodayDatedb();
+        const invoiceDate = invoiceDateInput || formattedToday;
+
+        // Validation
+        if (!deliveryDateInput) {
+            alert("Please provide a delivery date.");
+            return;
+        }
+        if (!customerName || !customerAddress || !customerContact) {
+            alert("Please provide complete customer details.");
+            return;
+        }
+
+        // Generate a unique invoice ID
+        const invoiceId = generateUniqueInvoiceNumber();
+
+        // Get all rows of the table
+        const rows = document.querySelectorAll("table tbody tr");
+        const tableData = [];
+
+        // Loop through each row and extract required data
+        rows.forEach((row) => {
+            const item = row.querySelector("td:nth-child(2)").textContent.trim();
+            const quantity = row.querySelector(".quantity-value").textContent.trim();
+            const unit = row.querySelector(".edit-per").textContent.trim();
+            const rate = row.querySelector(".price-value").textContent.trim();
+
+            tableData.push({
+                itemName: item,
+                quantity: parseInt(quantity, 10),
+                unit: unit,
+                unitPrice: parseFloat(rate),
+            });
+        });
+
+        // Prepare data for the PHP script
+        const invoiceData = {
+            invoiceNumber: invoiceId,
+            invoiceDate: invoiceDate,
+            deliveryDate: deliveryDateInput,
+            customerName: customerName,
+            customerAddress: customerAddress,
+            customerContact: customerContact,
+            gstPercentage: gstPercentage,
+            table: tableData,
+        };
+
+        try {
+            const response = await fetch("saveInvoice.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(invoiceData),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert("Invoice and items saved successfully!");
+                location.reload();
+            } else {
+                alert(`Failed to save data: ${result.error || "Unknown error"}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred while saving the invoice.");
+        }
+    });
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
