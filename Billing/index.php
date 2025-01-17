@@ -520,6 +520,8 @@ include('../config/dbcon.php');
 </script>
 
 <!-- Invoice export function -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script>
     const invoiceCard = document.querySelector('#invoice');
     const exportButton = document.querySelector('#export');
@@ -540,17 +542,33 @@ include('../config/dbcon.php');
             invoiceNumberElement.innerHTML = `Invoice Number<br>${uniqueInvoiceNumber}`;
         }
 
-        if (typeof html2canvas !== 'function') {
-            console.error('html2canvas is not loaded properly.');
+        if (typeof html2canvas !== 'function' || typeof jsPDF !== 'function') {
+            console.error('Required libraries (html2canvas or jsPDF) are not loaded properly.');
             return;
         }
 
-        html2canvas(invoiceCard).then((canvas) => {
-            const imageUrl = canvas.toDataURL('image/jpeg');
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = 'invoice.jpeg';
-            link.click();
+        const canvasOptions = {
+            scale: 4
+        };
+
+        html2canvas(invoiceCard, canvasOptions).then((canvas) => {
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+            pdf.save(`invoice${uniqueInvoiceNumber}.pdf`);
+
+            location.reload();
         }).catch((error) => {
             console.error('Error while exporting the invoice:', error);
         });
@@ -706,7 +724,7 @@ include('../config/dbcon.php');
 
             if (result.success) {
                 alert("Invoice and items saved successfully!");
-                location.reload();
+                // location.reload();
             } else {
                 alert(`Failed to save data: ${result.error || "Unknown error"}`);
             }
@@ -716,7 +734,5 @@ include('../config/dbcon.php');
         }
     });
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <?php include('includes/footer.php') ?>
