@@ -194,7 +194,7 @@ if ($invoiceId > 0) {
                     <?php
                     $totalAmountSum = 0;
                     foreach ($invoiceItems as $index => $item): ?>
-                        <tr data-row-id="row-<?= $index; ?>">
+                        <tr data-row-id="row-<?= $index; ?>" data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
                             <td><?= $index + 1; ?></td>
                             <td class="item-name">
                                 <div class="CSS">
@@ -206,20 +206,18 @@ if ($invoiceId > 0) {
                                         data-bs-toggle="modal"
                                         data-bs-target="#editModal"
                                         data-name="<?= htmlspecialchars($item['itemName']); ?>"
-                                        data-column-name="Item Name">
-                                        <i
-                                            class="bi bi-pen edit-name-icon"
-                                            style="cursor: pointer;"></i>
+                                        data-column-name="Item Name"
+                                        data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
+                                        <i class="bi bi-pen edit-name-icon" style="cursor: pointer;"></i>
                                     </a>
                                     <a href="#"
                                         class="remove-button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#removeRowModal"
                                         data-row-id="row-<?= $index; ?>"
-                                        data-name="<?= htmlspecialchars($item['itemName']); ?>">
-                                        <i
-                                            class="bi bi-dash-circle py-1 remove-row-icon"
-                                            style="cursor: pointer;"></i>
+                                        data-name="<?= htmlspecialchars($item['itemName']); ?>"
+                                        data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
+                                        <i class="bi bi-dash-circle py-1 remove-row-icon" style="cursor: pointer;"></i>
                                     </a>
                                 </div>
                             </td>
@@ -233,10 +231,9 @@ if ($invoiceId > 0) {
                                         data-bs-toggle="modal"
                                         data-bs-target="#editModal"
                                         data-quantity="<?= htmlspecialchars($item['quantity']); ?>"
-                                        data-column-name="Quantity">
-                                        <i
-                                            class="bi bi-pen mx-1 edit-quantity-icon"
-                                            style="cursor: pointer;"></i>
+                                        data-column-name="Quantity"
+                                        data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
+                                        <i class="bi bi-pen mx-1 edit-quantity-icon" style="cursor: pointer;"></i>
                                     </a>
                                 </div>
                             </td>
@@ -250,10 +247,9 @@ if ($invoiceId > 0) {
                                         data-bs-toggle="modal"
                                         data-bs-target="#editModal"
                                         data-unit="<?= htmlspecialchars($item['unit']); ?>"
-                                        data-column-name="Unit">
-                                        <i
-                                            class="bi bi-pen mx-1 edit-unit-icon"
-                                            style="cursor: pointer;"></i>
+                                        data-column-name="Unit"
+                                        data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
+                                        <i class="bi bi-pen mx-1 edit-unit-icon" style="cursor: pointer;"></i>
                                     </a>
                                 </div>
                             </td>
@@ -267,10 +263,9 @@ if ($invoiceId > 0) {
                                         data-bs-toggle="modal"
                                         data-bs-target="#editModal"
                                         data-unitPrice="<?= htmlspecialchars($item['unitPrice']); ?>"
-                                        data-column-name="Rate">
-                                        <i
-                                            class="bi bi-pen mx-1 edit-unitPrice-icon"
-                                            style="cursor: pointer;"></i>
+                                        data-column-name="Rate"
+                                        data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
+                                        <i class="bi bi-pen mx-1 edit-unitPrice-icon" style="cursor: pointer;"></i>
                                     </a>
                                 </div>
                             </td>
@@ -629,7 +624,7 @@ if ($invoiceId > 0) {
                 .then(result => {
                     if (result.status === 'updated') {
                         alert('Changes saved successfully.');
-                        location.reload();
+                        // location.reload();
                     } else {
                         alert('Error: ' + result.message);
                     }
@@ -1196,55 +1191,46 @@ if ($invoiceId > 0) {
     });
 </script>
 
+<!-- save items and print pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script>
-    document.getElementById('saveInvoice').addEventListener('click', function() {
-        let rows = document.querySelectorAll('#dataTable tbody tr');
-        let invoiceData = [];
-        let invoiceId = getUrlParameter('invoiceId'); // Get the invoiceId from the URL
+    const exportButton = document.querySelector('#saveInvoice'); // Assuming you have a button with id "export"
+    const invoiceCard = document.querySelector('#invoice'); // The div containing the invoice
 
-        rows.forEach(function(row) {
-            let itemName = row.querySelector('.item-name .itemName').innerText.trim();
-            let quantity = row.querySelector('.item-quantity .Quantity').innerText.trim();
-            let unit = row.querySelector('.unit .unit').innerText.trim();
-            let unitPrice = row.querySelector('.unitPrice .Rate').innerText.trim();
+    // Function to capture the screenshot and generate the PDF
+    exportButton.addEventListener('click', () => {
+        if (typeof html2canvas !== 'function' || typeof jsPDF !== 'function') {
+            console.error('Required libraries (html2canvas or jsPDF) are not loaded properly.');
+            return;
+        }
 
-            invoiceData.push({
-                itemName: itemName,
-                quantity: parseInt(quantity),
-                unit: unit,
-                unitPrice: parseFloat(unitPrice),
-                invoiceId: invoiceId // Include invoiceId from the URL
+        html2canvas(invoiceCard, {
+            scale: 2
+        }).then((canvas) => {
+            // Convert the canvas to a data URL (image format)
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+            // Create a new jsPDF instance
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
             });
+
+            // Calculate the dimensions of the PDF page based on the image
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            // Add the image (screenshot) to the PDF
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+            // Save the PDF
+            pdf.save('invoice.pdf');
+        }).catch((error) => {
+            console.error('Error while capturing the invoice:', error);
         });
-
-        // Make an AJAX request to save the data
-        fetch('save_invoice.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    items: invoiceData
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Invoice items saved successfully!');
-                } else {
-                    alert('Failed to save items.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
     });
-
-    // Function to get URL parameter by name
-    function getUrlParameter(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
 </script>
 
 
