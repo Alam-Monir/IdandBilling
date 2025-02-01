@@ -277,7 +277,7 @@ include('../config/dbcon.php');
             <td>${index + 1}</td>
             <td>${item}</td>
             <td>
-                <div class="quantity">
+                <div class="quantity ms-2">
                     <i class="bi bi-dash decrease-icon" style="cursor: pointer;"></i>
                     <span class="quantity-value">1</span>
                     <i class="bi bi-plus increase-icon" style="cursor: pointer;"></i>
@@ -285,13 +285,13 @@ include('../config/dbcon.php');
                 </div>
             </td>
             <td>
-                <div class="quantity">
+                <div class="quantity ms-3">
                     <span class="edit-per">Pcs</span>
                     <i class="bi bi-pencil edit-per-icon py-2" style="cursor: pointer;"></i>
                 </div>
             </td>
             <td>
-                <div class="quantity">
+                <div class="quantity ms-3">
                     <span class="price-value">100</span>
                     <i class="bi bi-pencil edit-price-icon py-1" style="cursor: pointer;"></i>
                 </div>
