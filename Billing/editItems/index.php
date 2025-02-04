@@ -121,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
         <tr>
           <th scope="col">Sl.no</th>
           <th scope="col">Name</th>
+          <!-- tabel added quantity -->
           <th scope="col">Price</th>
           <th scope="col">Manage</th>
         </tr>

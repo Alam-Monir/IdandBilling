@@ -61,7 +61,11 @@ if ($invoiceId > 0) {
 }
 ?>
 <style>
+    
+    
     .CSS i {
+      
+      position: absolute;
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s, opacity 0.3s;
@@ -158,6 +162,8 @@ if ($invoiceId > 0) {
                 <?php endif; ?>
             </div>
 
+            <!-- tabel invoice  -->
+
             <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0 card position-relative mt-3 mr-3">
                 <div class="card w-50 position-absolute top-0 start-0 fw-bold" id="invoiceNumber">
                     Invoice Number<br><?= htmlspecialchars($invoiceId ?? 'Unknown'); ?>
@@ -196,6 +202,8 @@ if ($invoiceId > 0) {
                     foreach ($invoiceItems as $index => $item): ?>
                         <tr data-row-id="row-<?= $index; ?>" data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
                             <td><?= $index + 1; ?></td>
+
+                            <!-- need to fix -->
                             <td class="item-name">
                                 <div class="CSS">
                                     <span class="itemName">
@@ -208,7 +216,7 @@ if ($invoiceId > 0) {
                                         data-name="<?= htmlspecialchars($item['itemName']); ?>"
                                         data-column-name="Item Name"
                                         data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
-                                        <i class="bi bi-pen edit-name-icon" style="cursor: pointer;"></i>
+                                        <i class="bi bi-pen edit-name-icon m-1" style="cursor: pointer;"></i>
                                     </a>
                                     <a href="#"
                                         class="remove-button"
@@ -217,7 +225,7 @@ if ($invoiceId > 0) {
                                         data-row-id="row-<?= $index; ?>"
                                         data-name="<?= htmlspecialchars($item['itemName']); ?>"
                                         data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
-                                        <i class="bi bi-dash-circle py-1 remove-row-icon" style="cursor: pointer;"></i>
+                                        <i class="bi bi-dash-circle py-1 remove-row-icon ms-4" style="cursor: pointer;"></i>
                                     </a>
                                 </div>
                             </td>
