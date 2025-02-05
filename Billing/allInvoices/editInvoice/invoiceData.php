@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 include('../../../config/dbcon.php');
+include ('../../../auth/auth_check_admin.php');
 
 if (!isset($pdo)) {
     echo json_encode(['status' => 'error', 'message' => 'Database connection not initialized']);

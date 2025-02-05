@@ -1,5 +1,6 @@
 <?php
 include('../../config/dbcon.php');
+include ('../../auth/auth_check_admin.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? null;

@@ -29,10 +29,10 @@
           Billing <i class="bi bi-receipt-cutoff"></i>
         </button>
         <a href="auth/logout.php">
-          <button class="btn btn-danger">Logout</button>
+          <button class="btn btn-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
         </a>
         <a href="settings/">
-          <button class="btn btn-secondary">Settings</button>
+          <button class="btn btn-secondary">Settings <i class="bi bi-gear"></i></button>
         </a>
     </div>
 

@@ -1,5 +1,6 @@
 <?php
 include('../../config/dbcon.php');
+include ('../../auth/auth_check_admin.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['invoiceId'])) {

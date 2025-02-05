@@ -1,5 +1,6 @@
 <?php
 include('../../../config/dbcon.php');
+include ('../../../auth/auth_check_admin.php');
 
 $inputData = json_decode(file_get_contents("php://input"), true);
 
