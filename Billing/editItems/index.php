@@ -40,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
       <div class="mt-4">
         <input type="number" class="form-control ml-1" name="itemPrice" id="itemPrice" step="0.01" placeholder="Item Price" required>
       </div>
+      <div class="mt-4">
+        <input type="number" class="form-control ml-1" name="itemquantity " id="itemquantity" step="0.01" placeholder="Item quantity " required>
+      </div>
       <div class="mb-3 form-check">
       </div>
       <input type="hidden" name="action" value="createItem">
@@ -124,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
           <!-- tabel added quantity -->
           <th scope="col">Price</th>
           <th scope="col">Manage</th>
+          <th scope="col">quantity</th>
         </tr>
       </thead>
       <tbody>
