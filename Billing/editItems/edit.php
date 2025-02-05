@@ -10,11 +10,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'edit') {
             // Handle edit action
             $itemId = $_POST['itemId'] ?? null;
+            $itemName = $_POST['itemName'] ?? null;
+            $quantity = $_POST['quantity'] ?? null;
             $itemPrice = $_POST['itemPrice'] ?? null;
 
             if ($itemId && is_numeric($itemPrice)) {
-                $stmt = $pdo->prepare("UPDATE items SET itemPrice = :itemPrice WHERE itemId = :itemId");
+                $stmt = $pdo->prepare("UPDATE items SET itemName = :itemName, quantity = :quantity, itemPrice = :itemPrice WHERE itemId = :itemId");
                 $stmt->execute([
+                    'itemName' => $itemName,
+                    'quantity' => $quantity,
                     'itemPrice' => $itemPrice,
                     'itemId' => $itemId,
                 ]);

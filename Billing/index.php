@@ -89,6 +89,7 @@ include ('../auth/auth_check_staff.php');
         <div class="form-floating w-50">
             <input type="text" id="Items" class="form-control mt-3" placeholder="Items" title="Please enter the items" required>
             <label for="Items">Items</label>
+            <ul id="itemSuggestions" class="list-group position-absolute w-50"></ul>
         </div>
 
         <div class="input-group mb-2 w-50 mt-3">

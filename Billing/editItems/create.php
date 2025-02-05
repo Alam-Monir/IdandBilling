@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if (!empty($searchTerm)) {
-                $stmt = $pdo->prepare("SELECT itemId, itemName, itemPrice 
+                $stmt = $pdo->prepare("SELECT itemId, itemName, quantity, itemPrice 
                                FROM items 
                                WHERE itemName LIKE :searchTerm 
                                ORDER BY itemName ASC");
@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
     } elseif ($action === 'createItem') {
         $itemName = isset($_POST['itemName']) ? trim($_POST['itemName']) : '';
+        $quantity = isset($_POST['quantity']) ? trim($_POST['quantity']) : '';
         $itemPrice = isset($_POST['itemPrice']) ? trim($_POST['itemPrice']) : '';
 
         if (empty($itemName) || empty($itemPrice)) {
@@ -43,9 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $itemId = bin2hex(random_bytes(16));
 
         try {
-            $stmt = $pdo->prepare("INSERT INTO items (itemId, itemName, itemPrice) VALUES (:itemId, :itemName, :itemPrice)");
+            $stmt = $pdo->prepare("INSERT INTO items (itemId, itemName, quantity, itemPrice) VALUES (:itemId, :itemName, :quantity, :itemPrice)");
             $stmt->bindParam(':itemId', $itemId);
             $stmt->bindParam(':itemName', $itemName);
+            $stmt->bindParam(':quantity', $quantity);
             $stmt->bindParam(':itemPrice', $itemPrice);
             $stmt->execute();
 

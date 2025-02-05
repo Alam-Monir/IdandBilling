@@ -35,13 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
       <div class="d-flex justify-content-center fw-bold">Edit Items</div>
       <div class="mb-3 m-lg-1" style="margin: auto 15px auto 15px;">
         <label for="itemName" class="form-label" style="margin: 15px ;">Create New Item</label>
-        <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Item Name" required>
+        <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Item Name" autocomplete="off" required>
       </div>
       <div class="mt-4">
-        <input type="number" class="form-control ml-1" name="itemPrice" id="itemPrice" step="0.01" placeholder="Item Price" required>
+        <input type="number" class="form-control ml-1" name="itemPrice" id="itemPrice" placeholder="Item Price" required>
       </div>
       <div class="mt-4">
-        <input type="number" class="form-control ml-1" name="itemquantity " id="itemquantity" step="0.01" placeholder="Item quantity " required>
+        <input type="number" class="form-control ml-1" name="quantity" id="quantity" placeholder="Item quantity " required>
       </div>
       <div class="mb-3 form-check">
       </div>
@@ -97,8 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
           <div class="modal-body">
             <div class="mb-3">
               <label for="itemName" class="form-label">Item Name</label>
-              <input type="text" class="form-control" id="itemNameToEdit" name="itemName" readonly>
-              <!-- item name edit logic needs to be added -->
+              <input type="text" class="form-control" id="itemNameToEdit" name="itemName" autocomplete="off">
+            </div>
+            <div class="mb-3">
+              <label for="quantity" class="form-label">Item Quantity</label>
+              <input type="number" class="form-control" id="itemQuantityToEdit" name="quantity">
             </div>
             <div class="mb-3">
               <label for="itemPrice" class="form-label">Item Price</label>
@@ -124,16 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
         <tr>
           <th scope="col">Sl.no</th>
           <th scope="col">Name</th>
-          <!-- tabel added quantity -->
+          <th scope="col">quantity</th>
           <th scope="col">Price</th>
           <th scope="col">Manage</th>
-          <th scope="col">quantity</th>
         </tr>
       </thead>
       <tbody>
         <?php
         try {
-          $stmt = $pdo->prepare("SELECT itemId, itemName, itemPrice FROM items ORDER BY itemName ASC");
+          $stmt = $pdo->prepare("SELECT itemId, itemName, quantity, itemPrice FROM items ORDER BY itemName ASC");
           $stmt->execute();
           $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -144,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
               <tr>
                 <th scope="row"><?= $slNo++; ?></th>
                 <td><?= htmlspecialchars($item['itemName']); ?></td>
+                <td><?= htmlspecialchars($item['quantity']); ?></td>
                 <td><?= htmlspecialchars($item['itemPrice']); ?></td>
                 <td>
                   <a href="#"
@@ -152,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteItem'])) {
                     data-bs-target="#editItemModal"
                     data-item-id="<?= htmlspecialchars($item['itemId']); ?>"
                     data-item-name="<?= htmlspecialchars($item['itemName']); ?>"
+                    data-item-quantity="<?= htmlspecialchars($item['quantity'] ?? ''); ?>"
                     data-item-price="<?= htmlspecialchars($item['itemPrice']); ?>">
                     <i class="bi bi-pen px-2"></i>
                   </a>

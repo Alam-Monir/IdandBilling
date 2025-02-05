@@ -34,11 +34,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const button = e.target.closest('.edit-button');
             const itemId = button.getAttribute('data-item-id');
             const itemName = button.getAttribute('data-item-name');
+            const quantity = button.getAttribute('data-item-quantity');
             const itemPrice = button.getAttribute('data-item-price');
 
             document.getElementById('itemIdToEdit').value = itemId;
             document.getElementById('edit-modal-item-name').textContent = itemName;
             document.getElementById('itemNameToEdit').value = itemName;
+            document.getElementById('itemQuantityToEdit').value = quantity;
             document.getElementById('itemPriceToEdit').value = itemPrice;
         }
     });
