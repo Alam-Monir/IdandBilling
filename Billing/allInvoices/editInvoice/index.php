@@ -574,10 +574,10 @@ if ($invoiceId > 0) {
                     <div class="CSS">
                         <span class="itemName">${itemName}</span>
                         <a href="#" class="edit-name" data-bs-toggle="modal" data-bs-target="#editModal" data-name="${itemName}" data-column-name="Item Name">
-                            <i class="bi bi-pen edit-name-icon" style="cursor: pointer;"></i>
+                            <i class="bi bi-pen edit-name-icon" style="cursor: pointer; Postionin:absolute;margin-right:20px;"></i>
                         </a>
                         <a href="#" class="remove-button" data-bs-toggle="modal" data-bs-target="#removeRowModal" data-row-id="row-${slNo}" data-name="${itemName}">
-                            <i class="bi bi-dash-circle py-1 remove-row-icon" style="cursor: pointer;"></i>
+                            <i class="bi bi-dash-circle py-1 remove-row-icon" style="cursor: pointer; postionin:relative; margin-right:20px"></i>
                         </a>
                     </div>
                 </td>

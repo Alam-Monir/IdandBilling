@@ -4,7 +4,7 @@ include('../../config/dbcon.php');
 ?>
 
 <!-- All Codes Should Be Written Here -->
-<div class="card vh-100" style="max-width: 900vh;">
+<!-- <div class="card vh-100" style="max-width: 900vh;">
   <div class="row g-0">
    
     <div class="col-md-8" style="position:relative;">
@@ -46,6 +46,35 @@ include('../../config/dbcon.php');
     </div>
 
   </div>
+</div> -->
+
+<div class="card mt-5 vh-50 border border-3  p-5 " style="align-items:center">
+<form>
+  <div class="mb-3">
+  <h3 class="me-5 mb-5" style="margin-top:30px">Create Account</h3>
+  <h6 class="me-5 mb-5" style="margin-top:30px">Enter your details below to create yur account to get staretd</h6>
+    <label for="exampleInputEmail1" class="form-label">Full name</label>
+    <input type="text" class="form-control w-300" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Email</label>
+    <input type="email" class="form-control" id="exampleInputPassword1">
+  </div>
+
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">conform password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Confirm</button>
+  <button type="button" class="btn btn-outline-success"style="margin-left: 350px;">Cancel</button>
+
+</form>
 </div>
 
 <?php include('../includes/footer.php'); ?>
