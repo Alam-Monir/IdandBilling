@@ -365,7 +365,6 @@ include('../config/dbcon.php');
     function updateTotalAmount() {
         let totalAmount = 0;
 
-        // Loop through each row in the table and sum the Amount column
         const rows = document.querySelectorAll('#dataTable tbody tr');
         rows.forEach(row => {
             const amountCell = row.querySelector('.amount-column');
@@ -374,11 +373,9 @@ include('../config/dbcon.php');
             }
         });
 
-        // Update the Total Amount display
         const totalAmountElement = document.getElementById('totalAmount');
         totalAmountElement.textContent = `₹ ${totalAmount.toFixed(2)}`;
 
-        // Update the Amount in Words display
         const amountInWordsElement = document.getElementById('amountInWords');
         amountInWordsElement.textContent = `Amount in words: ${numberToWords(totalAmount)}`;
     }
@@ -386,61 +383,57 @@ include('../config/dbcon.php');
 
     // Function to convert a number into words
     function numberToWords(num) {
-        const ones = [
-            "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-            "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
-            "Eighteen", "Nineteen"
+        if (num === 0) return 'Zero Only';
+
+        const a = [
+            '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+            'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
         ];
-        const tens = [
-            "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
-        ];
-        const thousands = ["", "Thousand", "Lakh", "Crore"];
+        const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
-        if (num === 0) return "Zero";
-
-        let word = "";
-        let i = 0;
-
-        // Loop through the number in chunks of 1000 (for thousands, lakhs, etc.)
-        while (num > 0) {
-            if (num % 1000 !== 0) {
-                word = convertHundreds(num % 1000) + thousands[i] + " " + word;
+        function toWords(n) {
+            if (n === 0) return '';
+            let str = '';
+            if (n >= 100) {
+                str += a[Math.floor(n / 100)] + ' Hundred ';
+                n %= 100;
             }
-            num = Math.floor(num / 1000);
-            i++;
+            if (n > 19) {
+                str += b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '');
+            } else if (n > 0) {
+                str += a[n];
+            }
+            return str.trim();
         }
 
-        return word.trim();
-    }
+        let result = '';
+        let integerPart = Math.floor(num);
+        let decimalPart = Math.round((num - integerPart) * 100);
 
-    // Function to convert a number less than 1000 to words
-    function convertHundreds(num) {
-        const ones = [
-            "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
-            "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
-            "Eighteen", "Nineteen"
-        ];
-        const tens = [
-            "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
-        ];
-
-        let word = "";
-
-        if (num >= 100) {
-            word += ones[Math.floor(num / 100)] + " Hundred ";
-            num = num % 100;
+        if (integerPart >= 10000000) {
+            result += toWords(Math.floor(integerPart / 10000000)) + ' Crore ';
+            integerPart %= 10000000;
         }
 
-        if (num >= 20) {
-            word += tens[Math.floor(num / 10)] + " ";
-            num = num % 10;
+        if (integerPart >= 100000) {
+            result += toWords(Math.floor(integerPart / 100000)) + ' Lakh ';
+            integerPart %= 100000;
         }
 
-        if (num > 0) {
-            word += ones[num] + " ";
+        if (integerPart >= 1000) {
+            result += toWords(Math.floor(integerPart / 1000)) + ' Thousand ';
+            integerPart %= 1000;
         }
 
-        return word.trim() + " only";
+        if (integerPart > 0) {
+            result += toWords(integerPart);
+        }
+
+        if (decimalPart > 0) {
+            result += ' And ' + toWords(decimalPart) + ' Paise';
+        }
+
+        return result.trim() + ' Only';
     }
 </script>
 
@@ -554,7 +547,7 @@ include('../config/dbcon.php');
         html2canvas(invoiceCard, canvasOptions).then((canvas) => {
             const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
-            
+
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',

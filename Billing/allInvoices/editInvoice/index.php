@@ -61,11 +61,8 @@ if ($invoiceId > 0) {
 }
 ?>
 <style>
-    
-    
     .CSS i {
-      
-      position: absolute;
+        position: absolute;
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s, opacity 0.3s;
@@ -202,11 +199,9 @@ if ($invoiceId > 0) {
                     foreach ($invoiceItems as $index => $item): ?>
                         <tr data-row-id="row-<?= $index; ?>" data-invoice-item-id="<?= $item['invoiceItemId']; ?>">
                             <td><?= $index + 1; ?></td>
-
-                            <!-- need to fix -->
                             <td class="item-name">
                                 <div class="CSS">
-                                    <span class="itemName">
+                                    <span class="itemName" data-invoice-item-id="<?= $item['invoiceItemId']; ?>" data-invoice-id="<?= $item['invoiceId']; ?>">
                                         <?= htmlspecialchars($item['itemName']); ?>
                                     </span>
                                     <a href="#"
@@ -370,361 +365,69 @@ if ($invoiceId > 0) {
     </div>
 </div>
 
-
+<!-- Function to convert a number to words -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const invoiceId = urlParams.get('invoiceId');
+    function numberToWords(num) {
+        if (num === 0) return 'Zero Only';
 
-        if (!invoiceId) {
-            alert('Invoice ID is missing in the URL');
-            return;
+        const a = [
+            '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+            'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+        ];
+        const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        function toWords(n) {
+            if (n === 0) return '';
+            let str = '';
+            if (n >= 100) {
+                str += a[Math.floor(n / 100)] + ' Hundred ';
+                n %= 100;
+            }
+            if (n > 19) {
+                str += b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '');
+            } else if (n > 0) {
+                str += a[n];
+            }
+            return str.trim();
         }
 
-        const invoiceDate = document.getElementById('invoiceDate');
-        const customerName = document.getElementById('customerName');
-        const customerAddress = document.getElementById('customerAddress');
-        const customerContact = document.getElementById('customerContact');
-        const gstSelector = document.getElementById('gstSelector');
-        const deliveryDate = document.getElementById('deliveryDate');
-        const notDelivered = document.getElementById('notDelivered');
-        const delivered = document.getElementById('delivered');
-        const saveInvoice = document.getElementById('saveInvoice');
-        const cancelInvoice = document.getElementById('cancelInvoice');
-        const sellerGstNumber = document.getElementById('sellerGstInfo');
+        let result = '';
+        let integerPart = Math.floor(num);
+        let decimalPart = Math.round((num - integerPart) * 100);
 
-        // Display elements
-        const displayInvoiceDate = document.querySelector("#displayInvoiceDate span");
-        const displayCustomerName = document.getElementById("displayCustomerName");
-        const displayCustomerAddress = document.getElementById("displayCustomerAddress");
-        const displayCustomerContact = document.getElementById("displayCustomerContact");
-
-        let initialInvoiceData = {};
-
-        // Fetch invoice and customer data
-        fetch(`invoiceData.php?invoiceId=${invoiceId}`, {
-                method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status !== 'error') {
-                    invoiceDate.value = data.invoiceDate || '';
-                    customerName.value = data.customerName || '';
-                    customerAddress.value = data.customerAddress || '';
-                    customerContact.value = data.customerContact || '';
-                    gstSelector.value = data.gstPercentage || '';
-                    deliveryDate.value = data.deliveryDate || '';
-                    if (data.state === 1) delivered.checked = true;
-                    else notDelivered.checked = true;
-
-                    initialInvoiceData = {
-                        invoiceDate: invoiceDate.value,
-                        customerName: customerName.value,
-                        customerAddress: customerAddress.value,
-                        customerContact: customerContact.value,
-                        gstPercentage: gstSelector.value,
-                        deliveryDate: deliveryDate.value,
-                        state: delivered.checked ? 'delivered' : 'notDelivered',
-                    };
-
-                    updateInvoiceDisplay();
-                } else {
-                    alert(data.message);
-                }
-
-                //toggleInvoiceSaveButton();
-            });
-
-        function hasInvoiceChanges() {
-            return (
-                invoiceDate.value !== initialInvoiceData.invoiceDate ||
-                customerName.value !== initialInvoiceData.customerName ||
-                customerAddress.value !== initialInvoiceData.customerAddress ||
-                customerContact.value !== initialInvoiceData.customerContact ||
-                gstSelector.value !== initialInvoiceData.gstPercentage ||
-                deliveryDate.value !== initialInvoiceData.deliveryDate ||
-                (delivered.checked ? 'delivered' : 'notDelivered') !== initialInvoiceData.state
-            );
+        if (integerPart >= 10000000) {
+            result += toWords(Math.floor(integerPart / 10000000)) + ' Crore ';
+            integerPart %= 10000000;
         }
 
-        function toggleInvoiceSaveButton() {
-            saveInvoice.disabled = !hasInvoiceChanges();
+        if (integerPart >= 100000) {
+            result += toWords(Math.floor(integerPart / 100000)) + ' Lakh ';
+            integerPart %= 100000;
         }
 
-        function updateInvoiceDisplay() {
-            if (displayInvoiceDate) {
-                if (invoiceDate.value) {
-                    const date = new Date(invoiceDate.value);
-                    const formattedDate = date ?
-                        `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}` :
-                        'N/A';
-                    displayInvoiceDate.innerText = formattedDate;
-                } else {
-                    displayInvoiceDate.innerText = 'N/A';
-                }
-            }
-
-            if (displayCustomerName) {
-                displayCustomerName.innerText = customerName.value || 'Unknown';
-            }
-
-            if (displayCustomerAddress) {
-                displayCustomerAddress.innerText = customerAddress.value || 'Unknown';
-            }
-
-            if (displayCustomerContact) {
-                displayCustomerContact.innerText = customerContact.value || 'Unknown';
-            }
-
-            // Update GST-related fields dynamically
-            updateGSTDisplay();
-            updateSellerGstDisplay();
+        if (integerPart >= 1000) {
+            result += toWords(Math.floor(integerPart / 1000)) + ' Thousand ';
+            integerPart %= 1000;
         }
 
-
-        function updateGSTDisplay() {
-            const gstColumns = document.querySelectorAll('.gst-column');
-            const gstAmountColumns = document.querySelectorAll('.gstAmount-column');
-            const gstHeaders = document.querySelectorAll('.gst-column-head');
-            const gstAmountHeaders = document.querySelectorAll('.gstAmount-column-head');
-            const totalAmountColumns = document.querySelectorAll('.total-amount-column');
-            const items = <?= json_encode($invoiceItems); ?>;
-
-            const selectedGstValue = gstSelector.value;
-            const selectedGstText = gstSelector.options[gstSelector.selectedIndex]?.text || '';
-            const selectedGstPercentage = parseInt(selectedGstText.replace('%', '')) || 0;
-
-            let totalAmountSum = 0;
-
-            items.forEach((item, index) => {
-                const amount = item.unitPrice * item.quantity;
-                let gstAmount = 0;
-                let totalAmount = amount;
-
-                if (selectedGstValue !== '1') {
-                    gstAmount = (amount * selectedGstPercentage) / 100;
-                    totalAmount = amount + gstAmount;
-
-                    if (gstAmountColumns[index]) {
-                        gstAmountColumns[index].style.display = '';
-                        gstAmountColumns[index].innerText = gstAmount.toFixed(2);
-                    }
-
-                    if (gstColumns[index]) {
-                        gstColumns[index].style.display = '';
-                        gstColumns[index].innerText = selectedGstText;
-                    }
-
-                    gstHeaders.forEach(header => {
-                        header.style.display = '';
-                    });
-                    gstAmountHeaders.forEach(header => {
-                        header.style.display = '';
-                    });
-                } else {
-                    if (gstAmountColumns[index]) {
-                        gstAmountColumns[index].style.display = 'none';
-                        gstAmountColumns[index].innerText = '';
-                    }
-
-                    if (gstColumns[index]) {
-                        gstColumns[index].style.display = 'none';
-                    }
-
-                    gstHeaders.forEach(header => {
-                        header.style.display = 'none';
-                    });
-                    gstAmountHeaders.forEach(header => {
-                        header.style.display = 'none';
-                    });
-                }
-
-                if (totalAmountColumns[index]) {
-                    totalAmountColumns[index].innerText = totalAmount.toFixed(2);
-                }
-
-                totalAmountSum += totalAmount;
-            });
-
-            const totalAmountDisplay = document.getElementById('totalAmount');
-            if (totalAmountDisplay) {
-                totalAmountDisplay.innerText = `₹ ${totalAmountSum.toFixed(2)}`;
-            }
-
-            // Update the amount in words display
-            const amountInWordsDisplay = document.getElementById('amountInWords');
-            if (amountInWordsDisplay) {
-                amountInWordsDisplay.innerText = 'Amount in words: ' + numberToWords(totalAmountSum);
-            }
+        if (integerPart > 0) {
+            result += toWords(integerPart);
         }
 
-        function numberToWords(num) {
-            if (num === 0) return 'Zero';
-
-            const a = [
-                '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-                'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
-            ];
-            const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-            const c = ['Hundred', 'Thousand', 'Lakh', 'Crore'];
-
-            function toWords(n, suffix = '') {
-                let str = '';
-                if (n > 19) str += b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '') + suffix;
-                else if (n > 0) str += a[n] + suffix;
-                return str;
-            }
-
-            let result = '';
-            if (num >= 1000) {
-                result += toWords(Math.floor(num / 1000), ' Thousand ');
-                num %= 1000;
-            }
-            if (num >= 100) {
-                result += toWords(Math.floor(num / 100), ' Hundred ');
-                num %= 100;
-            }
-            if (num > 0) {
-                if (result !== '') result += 'And ';
-                result += toWords(num);
-            }
-
-            return result.trim() + ' Only';
+        if (decimalPart > 0) {
+            result += ' And ' + toWords(decimalPart) + ' Paise';
         }
 
-
-        function updateSellerGstDisplay() {
-            if (gstSelector.value === '1') { // "No GST" selected
-                if (sellerGstNumber) sellerGstNumber.innerText = '';
-            } else {
-                if (sellerGstNumber) sellerGstNumber.innerText = 'GSTIN : 1234ABCD5678'; // Replace with actual GST number
-            }
-        }
-
-        gstSelector.addEventListener('change', () => {
-            updateInvoiceDisplay();
-            updateSellerGstDisplay();
-        });
-
-        [invoiceDate, customerName, customerAddress, customerContact, deliveryDate, notDelivered, delivered].forEach(field => {
-            field.addEventListener('input', () => {
-                updateInvoiceDisplay();
-                //toggleInvoiceSaveButton();
-            });
-        });
-
-        saveInvoice.addEventListener('click', function() {
-            const invoiceData = new FormData();
-            invoiceData.append('invoiceId', invoiceId);
-            invoiceData.append('invoiceDate', invoiceDate.value || null);
-            invoiceData.append('deliveryDate', deliveryDate.value || null);
-            invoiceData.append('gstPercentage', gstSelector.value || null);
-            invoiceData.append('state', delivered.checked ? 'delivered' : 'notDelivered');
-            invoiceData.append('customerName', customerName.value || null);
-            invoiceData.append('customerContact', customerContact.value || null);
-            invoiceData.append('customerAddress', customerAddress.value || null);
-
-            fetch('invoiceData.php', {
-                    method: 'POST',
-                    body: invoiceData,
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status === 'updated') {
-                        alert('Changes saved successfully.');
-                        // location.reload();
-                    } else {
-                        alert('Error: ' + result.message);
-                    }
-                    initialInvoiceData = {
-                        invoiceDate: invoiceDate.value,
-                        customerName: customerName.value,
-                        customerAddress: customerAddress.value,
-                        customerContact: customerContact.value,
-                        gstPercentage: gstSelector.value,
-                        deliveryDate: deliveryDate.value,
-                        state: delivered.checked ? 'delivered' : 'notDelivered',
-                    };
-                    //toggleInvoiceSaveButton();
-                })
-                .catch(err => {
-                    console.error('Error:', err);
-                    alert('An error occurred while saving changes. Please try again.');
-                });
-        });
-
-        cancelInvoice.addEventListener('click', function() {
-            invoiceDate.value = initialInvoiceData.invoiceDate || '';
-            customerName.value = initialInvoiceData.customerName || '';
-            customerAddress.value = initialInvoiceData.customerAddress || '';
-            customerContact.value = initialInvoiceData.customerContact || '';
-            gstSelector.value = initialInvoiceData.gstPercentage || '';
-            deliveryDate.value = initialInvoiceData.deliveryDate || '';
-            if (initialInvoiceData.state === 'delivered') delivered.checked = true;
-            else notDelivered.checked = true;
-
-            updateInvoiceDisplay();
-            //toggleInvoiceSaveButton();
-        });
-    });
+        return result.trim() + ' Only';
+    }
 </script>
 
 <!-- add new items -->
 <script>
-    // Function to convert a number to words
-    function numberToWords(amount) {
-        const words = [
-            '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-            'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen',
-            'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
-        ];
-
-        if (amount === 0) {
-            return 'Zero';
-        }
-
-        const strAmount = amount.toString();
-        let [integerPart, decimalPart] = strAmount.split('.');
-
-        let wordsResult = '';
-
-        if (integerPart.length > 3) {
-            // Handle thousands
-            const thousands = Math.floor(parseInt(integerPart) / 1000);
-            wordsResult += words[thousands] + ' Thousand ';
-            integerPart = (parseInt(integerPart) % 1000).toString();
-        }
-
-        if (integerPart.length === 3) {
-            // Handle hundreds
-            const hundreds = Math.floor(parseInt(integerPart) / 100);
-            wordsResult += words[hundreds] + ' Hundred ';
-            integerPart = (parseInt(integerPart) % 100).toString();
-        }
-
-        if (parseInt(integerPart) < 20) {
-            wordsResult += words[parseInt(integerPart)] + ' ';
-        } else {
-            const tens = Math.floor(parseInt(integerPart) / 10);
-            const ones = parseInt(integerPart) % 10;
-            wordsResult += words[20 + tens - 2] + ' ' + words[ones] + ' ';
-        }
-
-        wordsResult = wordsResult.trim();
-
-        // Add decimal part if exists
-        if (decimalPart) {
-            wordsResult += ' and ' + decimalPart + '/100';
-        }
-
-        return wordsResult;
-    }
-    // Function to update GST and GST amount for all rows
     function updateGstForAllRows() {
         const gstSelector = document.getElementById('gstSelector');
         const selectedGstValue = parseInt(gstSelector.value);
 
-        // Calculate GST percentage based on the selected value
         let gstPercentage = 0;
         switch (selectedGstValue) {
             case 1:
@@ -747,7 +450,6 @@ if ($invoiceId > 0) {
                 break;
         }
 
-        // Show/Hide GST and GST Amount columns based on the selected GST value
         const gstColumns = document.querySelectorAll('.gst-column-head, .gstAmount-column-head');
         const gstRows = document.querySelectorAll('.gst-column, .gstAmount-column');
 
@@ -759,7 +461,6 @@ if ($invoiceId > 0) {
             gstRows.forEach(row => row.style.display = '');
         }
 
-        // Now update all rows with the selected GST value
         const rows = document.querySelectorAll('#dataTable tbody tr');
 
         rows.forEach(row => {
@@ -771,7 +472,6 @@ if ($invoiceId > 0) {
             const rate = parseFloat(rateCell.querySelector('.Rate').textContent);
             const quantity = parseInt(quantityCell.querySelector('.Quantity').textContent);
 
-            // Update GST column and calculate GST Amount if applicable
             if (gstPercentage > 0) {
                 gstColumn.textContent = `${gstPercentage}%`;
                 const gstAmount = (rate * quantity * gstPercentage) / 100;
@@ -781,34 +481,29 @@ if ($invoiceId > 0) {
                 gstAmountColumn.textContent = '';
             }
 
-            // Recalculate total amount for the row
             const totalAmount = (rate * quantity) + (gstPercentage > 0 ? parseFloat(gstAmountColumn.textContent) : 0);
             row.querySelector('.total-amount-column').textContent = totalAmount.toFixed(2);
         });
 
-        updateTotalAmount(); // Update the total amount when GST is changed
+        updateTotalAmount();
     }
 
-    // Function to update total amount and amount in words
     function updateTotalAmount() {
         let totalAmount = 0;
 
-        // Loop through all rows to calculate the total amount
         const rows = document.querySelectorAll('#dataTable tbody tr');
         rows.forEach(row => {
             const totalAmountCell = row.querySelector('.total-amount-column');
-            if (totalAmountCell) { // Ensure the element exists before accessing it
+            if (totalAmountCell) {
                 totalAmount += parseFloat(totalAmountCell.textContent);
             }
         });
 
-        // Check if the totalAmount element exists before updating it
         const totalAmountElement = document.getElementById('totalAmount');
         if (totalAmountElement) {
             totalAmountElement.textContent = '₹ ' + totalAmount.toFixed(2);
         }
 
-        // Convert the total amount to words
         const totalInWords = numberToWords(totalAmount);
         const totalInWordsElement = document.getElementById('totalInWords');
         if (totalInWordsElement) {
@@ -817,26 +512,21 @@ if ($invoiceId > 0) {
     }
 
 
-    // Event listener for the `gstSelector` change
     document.getElementById('gstSelector').addEventListener('change', function() {
-        updateGstForAllRows(); // Update all rows with the new GST value
+        updateGstForAllRows();
     });
 
-    // Event listener for the `Items` input field and adding new items
     document.getElementById('Items').addEventListener('keypress', function(event) {
         const inputValue = event.target.value.trim();
 
         if (event.key === 'Enter' && inputValue.length > 0) {
-            event.preventDefault(); // Prevent form submission if inside a form
+            event.preventDefault();
 
-            // Split the input by spaces to treat each word as an item
             const items = inputValue.split(' ').map(item => item.trim()).filter(item => item.length > 0);
 
-            // Get the selected GST from the dropdown
             const gstSelector = document.getElementById('gstSelector');
             const selectedGstValue = parseInt(gstSelector.value);
 
-            // Calculate GST percentage based on the selected value
             let gstPercentage = 0;
             switch (selectedGstValue) {
                 case 1:
@@ -862,7 +552,6 @@ if ($invoiceId > 0) {
             const existingRows = document.querySelectorAll('#dataTable tbody tr');
             const existingRowsCount = existingRows.length;
 
-            // Update GST columns visibility before adding the new row
             updateGstForAllRows();
 
             items.forEach((itemName, index) => {
@@ -871,7 +560,6 @@ if ($invoiceId > 0) {
                 const rate = 100;
                 let gstAmount = 0;
 
-                // Calculate GST if applicable
                 if (gstPercentage > 0) {
                     gstAmount = (rate * quantity * gstPercentage) / 100;
                 }
@@ -925,7 +613,7 @@ if ($invoiceId > 0) {
 
                 document.querySelector('#dataTable tbody').insertAdjacentHTML('beforeend', newRow);
 
-                updateTotalAmount(); // Recalculate the total amount after adding new item
+                updateTotalAmount();
             });
 
             document.getElementById('Items').value = '';
@@ -938,46 +626,9 @@ if ($invoiceId > 0) {
     document.addEventListener('DOMContentLoaded', function() {
         let currentRowId = null;
 
-        // Function to convert numbers to words
-        function numberToWords(num) {
-            if (num === 0) return 'Zero Only';
-
-            const a = [
-                '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-                'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
-            ];
-            const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-            const c = ['Hundred', 'Thousand', 'Lakh', 'Crore'];
-
-            function toWords(n, suffix = '') {
-                let str = '';
-                if (n > 19) str += b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '') + suffix;
-                else if (n > 0) str += a[n] + suffix;
-                return str;
-            }
-
-            let result = '';
-            if (num >= 1000) {
-                result += toWords(Math.floor(num / 1000), ' Thousand ');
-                num %= 1000;
-            }
-            if (num >= 100) {
-                result += toWords(Math.floor(num / 100), ' Hundred ');
-                num %= 100;
-            }
-            if (num > 0) {
-                if (result !== '') result += 'And ';
-                result += toWords(num);
-            }
-
-            return result.trim() + ' Only';
-        }
-
-        // Attach event listeners to edit buttons dynamically
         document.querySelector('tbody').addEventListener('click', function(event) {
             let target = event.target;
 
-            // Find the closest <a> tag that was clicked (icon inside it)
             if (target.tagName === 'I') {
                 target = target.closest('a');
             }
@@ -987,7 +638,7 @@ if ($invoiceId > 0) {
                     target.classList.contains('edit-unit') ||
                     target.classList.contains('edit-unitPrice'))) {
 
-                event.preventDefault(); // Prevent default link action
+                event.preventDefault();
 
                 const rowElement = target.closest('tr');
                 currentRowId = rowElement.getAttribute('data-row-id');
@@ -1004,7 +655,6 @@ if ($invoiceId > 0) {
             }
         });
 
-        // Save updated values and apply changes to the row
         document.querySelector('#editModal #save-button').addEventListener('click', function() {
             if (currentRowId) {
                 const updatedValue = document.getElementById('editvalue').value;
@@ -1024,18 +674,14 @@ if ($invoiceId > 0) {
                     const columnElement = rowElement.querySelector(`.${columnClass} span`);
                     if (columnElement) {
                         if (columnName === 'Quantity') {
-                            // Ensure Quantity is parsed as an integer
-                            columnElement.textContent = parseInt(updatedValue) || 0; // Set 0 if NaN
+                            columnElement.textContent = parseInt(updatedValue) || 0;
                         } else if (columnName === 'Rate') {
-                            // Ensure Rate is parsed as a float
-                            columnElement.textContent = parseFloat(updatedValue).toFixed(2) || '0.00'; // Set '0.00' if NaN
+                            columnElement.textContent = parseFloat(updatedValue).toFixed(2) || '0.00';
                         } else {
-                            // Set text for non-numeric fields like Item Name or Unit
                             columnElement.textContent = updatedValue;
                         }
                     }
 
-                    // Update row calculations if the Quantity or Rate was updated
                     if (columnName === 'Quantity' || columnName === 'Rate') {
                         const gstElement = rowElement.querySelector('.gst-column');
                         const gstPercentage = parseFloat(gstElement.textContent.replace('%', '').trim()) || 0;
@@ -1043,7 +689,6 @@ if ($invoiceId > 0) {
                     }
                 }
 
-                // Close the modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
                 modal.hide();
                 currentRowId = null;
@@ -1052,7 +697,6 @@ if ($invoiceId > 0) {
 
 
 
-        // Function to update row calculations
         function updateRowCalculations(rowElement, gstPercentage) {
             const quantityElement = rowElement.querySelector('.item-quantity .Quantity');
             const unitPriceElement = rowElement.querySelector('.unitPrice .Rate');
@@ -1071,7 +715,6 @@ if ($invoiceId > 0) {
             updateTotalAmountSum();
         }
 
-        // Function to update total amount and words
         function updateTotalAmountSum() {
             let totalAmountSum = 0;
             document.querySelectorAll('.total-amount-column').forEach(element => {
@@ -1089,48 +732,39 @@ if ($invoiceId > 0) {
     document.addEventListener('DOMContentLoaded', function() {
         let rowToDelete = null;
 
-        // Handle clicking the remove button
         document.querySelectorAll('.remove-button').forEach(button => {
             button.addEventListener('click', function() {
                 const rowId = this.getAttribute('data-row-id');
                 const itemName = this.getAttribute('data-name');
 
-                // Store row reference
                 rowToDelete = document.querySelector(`tr[data-row-id="${rowId}"]`);
 
-                // Update modal text
                 document.getElementById('hiddenItemName').value = itemName;
                 document.getElementById('displayItemName').textContent = itemName;
             });
         });
 
-        // Handle delete confirmation
         document.querySelector('#removeRowFormModal').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission (useful for AJAX)
+            event.preventDefault();
 
             if (rowToDelete) {
-                rowToDelete.remove(); // Remove the row
-                updateSerialNumbers(); // Update serial numbers after deletion
-                updateTotalAmountSum(); // Update totals after deletion
+                rowToDelete.remove();
+                updateSerialNumbers();
+                updateTotalAmountSum();
                 rowToDelete = null;
             }
 
-            // Hide the modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('removeRowModal'));
             modal.hide();
         });
 
-        // Function to update serial numbers after row deletion
         function updateSerialNumbers() {
             const rows = document.querySelectorAll('tbody tr[data-row-id]');
             rows.forEach((row, index) => {
-                // Update serial number
                 row.querySelector('td:first-child').textContent = index + 1;
 
-                // Update row ID to match new order
                 row.setAttribute('data-row-id', `row-${index}`);
 
-                // Update remove button's data-row-id
                 const removeButton = row.querySelector('.remove-button');
                 if (removeButton) {
                     removeButton.setAttribute('data-row-id', `row-${index}`);
@@ -1146,56 +780,214 @@ if ($invoiceId > 0) {
                 totalAmountSum += parseFloat(element.textContent.replace(/,/g, '')) || 0;
             });
 
-            // Update the total amount display
             const totalAmountDisplay = document.getElementById('totalAmount');
             if (totalAmountDisplay) {
                 totalAmountDisplay.textContent = '₹ ' + totalAmountSum.toFixed(2);
             }
 
-            // Update the amount in words display
             const amountInWordsDisplay = document.getElementById('amountInWords');
             if (amountInWordsDisplay) {
-                amountInWordsDisplay.textContent = 'Amount in words: ' + numberToWords(Math.floor(totalAmountSum));
+                amountInWordsDisplay.textContent = 'Amount in words: ' + numberToWords(totalAmountSum);
             }
         }
+    });
+</script>
 
-        function numberToWords(num) {
-            if (num === 0) return 'Zero Only';
+<!-- updating db script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const invoiceId = urlParams.get('invoiceId');
 
-            const a = [
-                '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-                'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
-            ];
-            const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        if (!invoiceId) {
+            alert('Invoice ID is missing in the URL');
+            return;
+        }
 
-            function toWords(n, suffix = '') {
-                let str = '';
-                if (n > 19) {
-                    str += b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '') + suffix;
-                } else if (n > 0) {
-                    str += a[n] + suffix;
+        const invoiceDate = document.getElementById('invoiceDate');
+        const customerName = document.getElementById('customerName');
+        const customerAddress = document.getElementById('customerAddress');
+        const customerContact = document.getElementById('customerContact');
+        const gstSelector = document.getElementById('gstSelector');
+        const deliveryDate = document.getElementById('deliveryDate');
+        const notDelivered = document.getElementById('notDelivered');
+        const delivered = document.getElementById('delivered');
+        const saveInvoice = document.getElementById('saveInvoice');
+        const cancelInvoice = document.getElementById('cancelInvoice');
+        const sellerGstNumber = document.getElementById('sellerGstInfo');
+
+        // Display elements
+        const displayInvoiceDate = document.querySelector("#displayInvoiceDate span");
+        const displayCustomerName = document.getElementById("displayCustomerName");
+        const displayCustomerAddress = document.getElementById("displayCustomerAddress");
+        const displayCustomerContact = document.getElementById("displayCustomerContact");
+
+        let initialInvoiceData = {};
+
+        // Fetch invoice and customer data
+        fetch(`invoiceData.php?invoiceId=${invoiceId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'error') {
+                    invoiceDate.value = data.invoiceDate || '';
+                    customerName.value = data.customerName || '';
+                    customerAddress.value = data.customerAddress || '';
+                    customerContact.value = data.customerContact || '';
+                    gstSelector.value = data.gstPercentage || '';
+                    deliveryDate.value = data.deliveryDate || '';
+                    if (data.state === 1) delivered.checked = true;
+                    else notDelivered.checked = true;
+
+                    initialInvoiceData = {
+                        invoiceDate: invoiceDate.value,
+                        customerName: customerName.value,
+                        customerAddress: customerAddress.value,
+                        customerContact: customerContact.value,
+                        gstPercentage: gstSelector.value,
+                        deliveryDate: deliveryDate.value,
+                        state: delivered.checked ? 'delivered' : 'notDelivered',
+                    };
+
+                    updateInvoiceDisplay();
+                } else {
+                    alert(data.message);
                 }
-                return str;
+            });
+
+        function updateInvoiceDisplay() {
+            if (displayInvoiceDate) {
+                if (invoiceDate.value) {
+                    const date = new Date(invoiceDate.value);
+                    const formattedDate = date ? `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}` : 'N/A';
+                    displayInvoiceDate.innerText = formattedDate;
+                } else {
+                    displayInvoiceDate.innerText = 'N/A';
+                }
             }
 
-            let result = '';
-            if (num >= 1000) {
-                result += toWords(Math.floor(num / 1000), ' Thousand ');
-                num %= 1000;
-            }
-            if (num >= 100) {
-                result += toWords(Math.floor(num / 100), ' Hundred ');
-                num %= 100;
-            }
-            if (num > 0) {
-                if (result !== '') result += 'And ';
-                result += toWords(num);
-            }
+            displayCustomerName.innerText = customerName.value || 'Unknown';
+            displayCustomerAddress.innerText = customerAddress.value || 'Unknown';
+            displayCustomerContact.innerText = customerContact.value || 'Unknown';
 
-            return result.trim() + ' Only';
+            updateGSTDisplay();
+            updateSellerGstDisplay();
         }
 
+        function updateGSTDisplay() {
+            const gstColumns = document.querySelectorAll('.gst-column');
+            const gstAmountColumns = document.querySelectorAll('.gstAmount-column');
+            const gstHeaders = document.querySelectorAll('.gst-column-head');
+            const gstAmountHeaders = document.querySelectorAll('.gstAmount-column-head');
+            const totalAmountColumns = document.querySelectorAll('.total-amount-column');
+            const items = <?= json_encode($invoiceItems); ?>;
 
+            const selectedGstText = gstSelector.options[gstSelector.selectedIndex]?.text || '';
+            const selectedGstPercentage = parseInt(selectedGstText.replace('%', '')) || 0;
+
+            let totalAmountSum = 0;
+
+            items.forEach((item, index) => {
+                const amount = item.unitPrice * item.quantity;
+                let gstAmount = (selectedGstPercentage !== 1) ? (amount * selectedGstPercentage) / 100 : 0;
+                let totalAmount = amount + gstAmount;
+
+                if (gstAmountColumns[index]) gstAmountColumns[index].innerText = gstAmount.toFixed(2);
+                if (gstColumns[index]) gstColumns[index].innerText = selectedGstText;
+                if (totalAmountColumns[index]) totalAmountColumns[index].innerText = totalAmount.toFixed(2);
+
+                totalAmountSum += totalAmount;
+            });
+
+            document.getElementById('totalAmount').innerText = `₹ ${totalAmountSum.toFixed(2)}`;
+            document.getElementById('amountInWords').innerText = 'Amount in words: ' + numberToWords(totalAmountSum);
+        }
+
+        function updateSellerGstDisplay() {
+            sellerGstNumber.innerText = gstSelector.value === '1' ? '' : 'GSTIN : 1234ABCD5678';
+        }
+
+        gstSelector.addEventListener('change', () => {
+            updateInvoiceDisplay();
+            updateSellerGstDisplay();
+        });
+
+        [invoiceDate, customerName, customerAddress, customerContact, deliveryDate, notDelivered, delivered].forEach(field => {
+            field.addEventListener('input', updateInvoiceDisplay);
+        });
+
+        saveInvoice.addEventListener('click', function() {
+            // Collect invoice items data
+            let invoiceItems = [];
+            document.querySelectorAll("tbody tr").forEach(row => {
+                let invoiceItemId = row.getAttribute("data-invoice-item-id") || "";
+                let itemName = row.querySelector(".itemName").innerText.trim();
+                let quantity = row.querySelector(".Quantity").innerText.trim();
+                let unit = row.querySelector(".unit").innerText.trim();
+                let rate = row.querySelector(".Rate").innerText.trim();
+
+                invoiceItems.push({
+                    invoiceItemId,
+                    itemName,
+                    quantity,
+                    unit,
+                    rate
+                });
+            });
+
+            // Prepare requests
+            let invoiceItemsRequest = fetch("save_invoice.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    invoiceId,
+                    invoiceItems
+                })
+            }).then(response => response.json());
+
+            let invoiceData = new FormData();
+            invoiceData.append('invoiceId', invoiceId);
+            invoiceData.append('invoiceDate', invoiceDate.value || null);
+            invoiceData.append('deliveryDate', deliveryDate.value || null);
+            invoiceData.append('gstPercentage', gstSelector.value || null);
+            invoiceData.append('state', delivered.checked ? 'delivered' : 'notDelivered');
+            invoiceData.append('customerName', customerName.value || null);
+            invoiceData.append('customerContact', customerContact.value || null);
+            invoiceData.append('customerAddress', customerAddress.value || null);
+
+            let invoiceDetailsRequest = fetch("invoiceData.php", {
+                method: "POST",
+                body: invoiceData
+            }).then(response => response.json());
+
+            // Execute both requests and show a single alert
+            Promise.all([invoiceItemsRequest, invoiceDetailsRequest])
+                .then(([invoiceItemsResult, invoiceDetailsResult]) => {
+                    if (invoiceItemsResult.success && invoiceDetailsResult.status === "updated") {
+                        alert("Invoice saved successfully!");
+                    } else {
+                        alert("Error: Could not save all data.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while saving. Please try again.");
+                });
+        });
+
+        cancelInvoice.addEventListener('click', function() {
+            invoiceDate.value = initialInvoiceData.invoiceDate || '';
+            customerName.value = initialInvoiceData.customerName || '';
+            customerAddress.value = initialInvoiceData.customerAddress || '';
+            customerContact.value = initialInvoiceData.customerContact || '';
+            gstSelector.value = initialInvoiceData.gstPercentage || '';
+            deliveryDate.value = initialInvoiceData.deliveryDate || '';
+            delivered.checked = (initialInvoiceData.state === 'delivered');
+            notDelivered.checked = (initialInvoiceData.state !== 'delivered');
+
+            updateInvoiceDisplay();
+        });
     });
 </script>
 
@@ -1203,10 +995,9 @@ if ($invoiceId > 0) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script>
-    const exportButton = document.querySelector('#saveInvoice'); // Assuming you have a button with id "export"
-    const invoiceCard = document.querySelector('#invoice'); // The div containing the invoice
+    const exportButton = document.querySelector('#saveInvoice');
+    const invoiceCard = document.querySelector('#invoice');
 
-    // Function to capture the screenshot and generate the PDF
     exportButton.addEventListener('click', () => {
         if (typeof html2canvas !== 'function' || typeof jsPDF !== 'function') {
             console.error('Required libraries (html2canvas or jsPDF) are not loaded properly.');
@@ -1216,24 +1007,19 @@ if ($invoiceId > 0) {
         html2canvas(invoiceCard, {
             scale: 2
         }).then((canvas) => {
-            // Convert the canvas to a data URL (image format)
             const imgData = canvas.toDataURL('image/jpeg', 1.0);
 
-            // Create a new jsPDF instance
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
                 format: 'a4',
             });
 
-            // Calculate the dimensions of the PDF page based on the image
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            // Add the image (screenshot) to the PDF
             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
-            // Save the PDF
             pdf.save('invoice.pdf');
         }).catch((error) => {
             console.error('Error while capturing the invoice:', error);
