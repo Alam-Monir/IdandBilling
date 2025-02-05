@@ -1,3 +1,5 @@
+<?php include "auth/auth_check_staff.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,8 +28,13 @@
         <button type="button" class="btn btn-primary btn-lg px-5" style="margin-left: 40vh;">
           Billing <i class="bi bi-receipt-cutoff"></i>
         </button>
+        <a href="auth/logout.php">
+          <button class="btn btn-danger">Logout</button>
+      </a>
     </div>
+    
   </div>
+
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/jquery-3.7.1.min.js"></script>
 </body>

@@ -14,8 +14,8 @@ include('../../config/dbcon.php');
         <h3 class="" style="padding-left:385px;margin-top:30px">Welcome Back</h3>
         <h6 class="" style="padding-left:370px; margin-top:30px">Please login to your account</h6> -->
 
-        <!-- input field -->
-        <!-- <div class="form-floating mb-3" style="margin-left: 200px;">
+<!-- input field -->
+<!-- <div class="form-floating mb-3" style="margin-left: 200px;">
             <input type="text" class="form-control mt-5" style="width: 80vh;" id="givenCustomerName" name="name" placeholder="" required>
             <label for="givenCustomerName">Email Address</label>
           </div>
@@ -46,20 +46,18 @@ include('../../config/dbcon.php');
 </div> -->
 
 <div class="card mt-5 vh-50 border border-3  p-5 " style="align-items:center">
-<form>
-  <div class="mb-3">
-  <h3 class="me-5 mb-5" style="margin-top:30px">Login To Your account</h3>
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control w-300" id="exampleInputEmail1" aria-describedby="emailHelp">
-   
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  
-  <button type="submit" class="btn btn-primary">Submit</button>
-  <button type="button" class="btn btn-outline-success" style="margin-left: 200px;">Create account</button>
-</form>
+  <form action="login.php" method="POST">
+    <div class="mb-3">
+      <h3 class="me-5 mb-5" style="margin-top:30px">Login To Your Account</h3>
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control w-300" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-outline-success" style="margin-left: 200px;">Create Account</button>
+  </form>
 </div>
 <?php include('../includes/footer.php'); ?>
