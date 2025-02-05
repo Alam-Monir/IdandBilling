@@ -30,9 +30,12 @@
         </button>
         <a href="auth/logout.php">
           <button class="btn btn-danger">Logout</button>
-      </a>
+        </a>
+        <a href="settings/">
+          <button class="btn btn-secondary">Settings</button>
+        </a>
     </div>
-    
+
   </div>
 
   <script src="assets/js/bootstrap.bundle.min.js"></script>
