@@ -28,8 +28,10 @@
         <button type="button" class="btn btn-primary btn-lg px-5" style="margin-left: 40vh;">
           Billing <i class="bi bi-receipt-cutoff"></i>
         </button>
+
+        <!-- Settings-logout -->
         <a href="auth/logout.php">
-          <button class="btn btn-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
+          <button class="btn btn-danger p-3">Logout <i class="bi bi-box-arrow-right"></i></button>
         </a>
         <a href="settings/">
           <button class="btn btn-secondary">Settings <i class="bi bi-gear"></i></button>

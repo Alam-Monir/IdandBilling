@@ -62,8 +62,22 @@ if ($invoiceId > 0) {
 }
 ?>
 <style>
+    
+    .CSSl  {
+        margin-left: 30px;
+    }
+    .CSSl i {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.3s;
+    }
+
+    .CSSl:hover i {
+        visibility: visible;
+        opacity: 1;
+    }
     .CSS i {
-        /* position: absolute; */
+        position: absolute;
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s, opacity 0.3s;
@@ -572,18 +586,18 @@ if ($invoiceId > 0) {
             <tr data-row-id="row-${slNo}">
                 <td>${slNo}</td>
                 <td class="item-name">
-                    <div class="CSS">
+                    <div class="CSSl">
                         <span class="itemName">${itemName}</span>
                         <a href="#" class="edit-name" data-bs-toggle="modal" data-bs-target="#editModal" data-name="${itemName}" data-column-name="Item Name">
-                            <i class="bi bi-pen edit-name-icon" style="cursor: pointer ;margin-right:20px;"></i>
+                            <i class="bi bi-pen edit-name-icon" style="cursor: pointer;"></i>
                         </a>
                         <a href="#" class="remove-button" data-bs-toggle="modal" data-bs-target="#removeRowModal" data-row-id="row-${slNo}" data-name="${itemName}">
-                            <i class="bi bi-dash-circle py-1 remove-row-icon" style="cursor: pointer; postionin:relative; margin-right:20px"></i>
+                            <i class="bi bi-dash-circle py-1 remove-row-icon" style="cursor: pointer;"></i>
                         </a>
                     </div>
                 </td>
                 <td class="item-quantity">
-                    <div class="CSS">
+                    <div class="CSSl">
                         <span class="Quantity">${quantity}</span>
                         <a href="#" class="edit-quantity" data-bs-toggle="modal" data-bs-target="#editModal" data-quantity="${quantity}" data-column-name="Quantity">
                             <i class="bi bi-pen mx-1 edit-quantity-icon" style="cursor: pointer;"></i>
@@ -591,7 +605,7 @@ if ($invoiceId > 0) {
                     </div>
                 </td>
                 <td class="unit">
-                    <div class="CSS">
+                    <div class="CSSl">
                         <span class="unit">${unit}</span>
                         <a href="#" class="edit-unit" data-bs-toggle="modal" data-bs-target="#editModal" data-unit="${unit}" data-column-name="Unit">
                             <i class="bi bi-pen mx-1 edit-unit-icon" style="cursor: pointer;"></i>
@@ -599,7 +613,7 @@ if ($invoiceId > 0) {
                     </div>
                 </td>
                 <td class="unitPrice">
-                    <div class="CSS">
+                    <div class="CSSl">
                         <span class="Rate">${rate.toFixed(2)}</span>
                         <a href="#" class="edit-unitPrice" data-bs-toggle="modal" data-bs-target="#editModal" data-unitPrice="${rate.toFixed(2)}" data-column-name="Rate">
                             <i class="bi bi-pen mx-1 edit-unitPrice-icon" style="cursor: pointer;"></i>
