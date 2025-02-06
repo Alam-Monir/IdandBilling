@@ -30,11 +30,12 @@
         </button>
 
         <!-- Settings-logout -->
+         
         <a href="auth/logout.php">
-          <button class="btn btn-danger p-3">Logout <i class="bi bi-box-arrow-right"></i></button>
+          <button class="btn btn-danger p-2 position-absolute top-0 end-0">Logout <i class="bi bi-box-arrow-right"></i></button>
         </a>
         <a href="settings/">
-          <button class="btn btn-secondary">Settings <i class="bi bi-gear"></i></button>
+          <button class="btn btn-secondary position-absolute top-0 end-90">Settings <i class="bi bi-gear"></i></button>
         </a>
     </div>
 
