@@ -28,7 +28,7 @@ try {
 // $stmt->execute();
 
 // Fetch all users
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Password Change Modal -->
