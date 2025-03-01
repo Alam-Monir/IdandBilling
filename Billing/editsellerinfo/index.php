@@ -2,6 +2,7 @@
 <?php include('../includes/nav.php') ?>
 <?php include ('../../auth/auth_check_admin.php'); ?>
 
+
 <div class="d-flex justify-content-center mt-3">
   <div class="w-50 p-5 ml-5 shadow bg-body-tertiary">
     <form id="sellerInfo" class="rounded-3">

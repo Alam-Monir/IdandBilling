@@ -96,7 +96,7 @@ if ($invoiceId > 0) {
         <!-- Invoice form inputs -->
         <div class="form-floating w-50 mt-4">
             <input type="date" id="invoiceDate" class="form-control mt-3" placeholder="Invoice Date">
-            <label for="invoiceDate">Invoice Date</label>
+            <label for="invoiceDate">Invoice Datess</label>
         </div>
         <div class="form-floating w-50">
             <input type="text" id="customerName" class="form-control mt-3" placeholder="Customer Name">
@@ -149,8 +149,9 @@ if ($invoiceId > 0) {
 
 
 <!-- Invoice Table -->
-<div id="invoice" class="ml-5 bg-body-tertiary position-absolute end-0 h-100" style="width: 65%; margin-right:5px">
-    <div class="container text-center card h-100">
+<div id="invoice" class="ml-5 bg-img position-absolute end-0 h-100" style="width: 65%; margin-right:5px;">
+    <div class="container text-center card h-100" style=" background-image: url('../../image/watermark.png'); background-size: cover; background-position: center; background-size:50%; background-repeat: no-repeat; position:relative;" >
+    <img src="../../image/watermark.png" style="width: 50px; position:absolute; margin-left:40px;">
         <div class="row">
             <!-- Seller Information -->
             <?php
@@ -200,8 +201,8 @@ if ($invoiceId > 0) {
                     <th scope="col">SL.no</th>
                     <th scope="col">Item Name</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Unit</th>
-                    <th scope="col">Rate</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Unit Price</th>
                     <th scope="col" class="gst-column-head">GST</th>
                     <th scope="col" class="gstAmount-column-head">GST Amount</th>
                     <th scope="col">Amount</th>

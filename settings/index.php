@@ -89,7 +89,7 @@ try {
 <!-- left-box -->
 <div class="row">
   <div class="col-sm-6 mb-3 mb-sm-0 w-25">
-    <div class="card">
+    <div class="card h-100">
       <h5 class="px-3 pt-4 fs-4">Admin Details</h5>
       <div class="card-body">
         <h1 class="fs-6">Change User Name</h1>
