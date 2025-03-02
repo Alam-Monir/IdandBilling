@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div class="test">Coming Soon</div>
+    <div class="test">Coming Soon del</div>
 </body>
 
 </html>
